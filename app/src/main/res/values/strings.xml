@@ -8,4 +8,11 @@
     <string name="button_currently_reading_books">Currently Reading Books</string>
     <string name="button_all_books">All Books</string>
     <string name="image_description_book_manager_logo">Book Manager Logo</string>
+    <string name="label_list_of_all_books">List of all books</string>
+    <string name="toggle_grid_view">Grid View</string>
+    <string name="toggle_list_view">List View</string>
+    <string name="book_name_placeholder">Book Name</string>
+    <string name="book_cover_photo_description">Book cover photo</string>
+    <string name="number_of_pages_placeholder">Number of pages</string>
+    <string name="author_placeholder">Author</string>
 </resources>

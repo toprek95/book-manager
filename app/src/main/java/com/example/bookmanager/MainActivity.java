@@ -24,6 +24,14 @@ public class MainActivity extends AppCompatActivity {
 		//Initialize all view fields on activity_main layout
 		initViews();
 
+		allBooksButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(MainActivity.this, AllBooksActivity.class);
+				startActivity(intent);
+			}
+		});
+
 	}
 
 	private void initViews() {
