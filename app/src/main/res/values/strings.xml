@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Book Manager</string>
+    <string name="copyright">Copyright © Book Manager 2020. All rights reserved.</string>
+    <string name="button_about">ABOUT</string>
+    <string name="button_features">Favourites</string>
+    <string name="button_wishlist">WishList</string>
+    <string name="button_already_read_books">Already Read Books</string>
+    <string name="button_currently_reading_books">Currently Reading Books</string>
+    <string name="button_all_books">All Books</string>
+    <string name="image_description_book_manager_logo">Book Manager Logo</string>
 </resources>
