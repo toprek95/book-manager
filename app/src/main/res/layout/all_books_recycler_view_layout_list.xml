@@ -24,8 +24,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="30"
-                android:scaleType="centerCrop"
                 android:contentDescription="@string/book_cover_photo_description"
+                android:scaleType="centerCrop"
                 android:src="@mipmap/ic_launcher" />
 
             <RelativeLayout
@@ -37,11 +37,13 @@
                     android:id="@+id/book_name_all_books_layout_list"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
+                    android:layout_marginStart="15dp"
                     android:layout_marginTop="10dp"
+                    android:fontFamily="@font/open_sans_bold"
                     android:gravity="center_horizontal"
                     android:text="@string/book_name_placeholder"
-                    android:textSize="20sp"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="24sp"
                     android:textStyle="bold" />
 
 
@@ -50,11 +52,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/book_name_all_books_layout_list"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="15dp"
+                    android:fontFamily="@font/open_sans_italic"
                     android:gravity="center_horizontal"
                     android:text="@string/author_placeholder"
-                    android:textSize="18sp" />
+                    android:textSize="22sp" />
 
                 <TextView
                     android:id="@+id/book_pages_all_books_layout_list"
@@ -65,7 +67,8 @@
                     android:layout_marginTop="10dp"
                     android:gravity="center_horizontal"
                     android:text="@string/number_of_pages_placeholder"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:visibility="gone" />
 
                 <ImageView
                     android:id="@+id/down_arrow"
@@ -93,16 +96,29 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="7dp"
                 android:layout_marginTop="7dp"
+                android:fontFamily="@font/open_sans"
                 android:text="@string/short_book_description_label"
-                android:textSize="18sp" />
+                android:textSize="20sp" />
+
+            <View
+                android:id="@+id/hr"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/short_desc_label"
+                android:layout_marginStart="7dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="7dp"
+                android:layout_marginBottom="5dp"
+                android:background="#c0c0c0" />
 
             <TextView
                 android:id="@+id/short_book_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/short_desc_label"
+                android:layout_below="@id/hr"
                 android:layout_marginStart="7dp"
-                android:layout_marginTop="7dp"
+                android:layout_marginEnd="7dp"
+                android:fontFamily="@font/open_sans"
                 android:textSize="16sp" />
 
             <ImageView

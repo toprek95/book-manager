@@ -1,6 +1,7 @@
 package com.example.bookmanager.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,11 +17,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.TransitionManager;
 
 import com.bumptech.glide.Glide;
+import com.example.bookmanager.BookActivity;
 import com.example.bookmanager.Models.Book;
 import com.example.bookmanager.R;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
+
+import static com.example.bookmanager.BookActivity.BOOK_ID_KEY;
 
 public class AllBooksRecyclerViewAdapter extends RecyclerView.Adapter<AllBooksRecyclerViewAdapter.MyViewHolder> {
 	private ArrayList<Book> books = new ArrayList<>();
@@ -46,8 +50,7 @@ public class AllBooksRecyclerViewAdapter extends RecyclerView.Adapter<AllBooksRe
 		final Book bookItem = books.get(position);
 
 		holder.bookNameList.setText(bookItem.getName());
-		String author = "Author: " + bookItem.getAuthor();
-		holder.bookAuthorList.setText(author);
+		holder.bookAuthorList.setText(bookItem.getAuthor());
 		String pages = "Pages: " + bookItem.getNumberOdPages();
 		holder.bookPagesList.setText(pages);
 
@@ -61,7 +64,9 @@ public class AllBooksRecyclerViewAdapter extends RecyclerView.Adapter<AllBooksRe
 			@Override
 			public void onClick(View v) {
 				//TODO: Implement on book list card view click listener
-				Toast.makeText(mContext, bookItem.getId() + ": " + bookItem.getName() + " clicked", Toast.LENGTH_SHORT).show();
+				Intent intent = new Intent(mContext, BookActivity.class);
+				intent.putExtra(BOOK_ID_KEY, bookItem.getId());
+				mContext.startActivity(intent);
 			}
 		});
 

@@ -32,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
 			}
 		});
 
+		//Create instance of Utils singleton class, to initialize data so you can call static methods without exception
+		Utils.getInstance();
+
 	}
 
 	private void initViews() {
