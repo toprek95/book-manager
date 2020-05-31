@@ -19,10 +19,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.TransitionManager;
 
 import com.bumptech.glide.Glide;
+import com.example.bookmanager.AlreadyReadBooksActivity;
 import com.example.bookmanager.BookActivity;
+import com.example.bookmanager.CurrentlyReadingBooksActivity;
+import com.example.bookmanager.FavouriteBooksActivity;
 import com.example.bookmanager.Models.Book;
 import com.example.bookmanager.R;
 import com.example.bookmanager.Utils;
+import com.example.bookmanager.WishlistBooksActivity;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
@@ -100,7 +104,10 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecycler
 							public void onClick(DialogInterface dialog, int which) {
 								if (Utils.removeFromAlreadyReadBooks(bookItem)) {
 									Toast.makeText(mContext, "Removed from already read books.", Toast.LENGTH_SHORT).show();
-									notifyDataSetChanged();
+									//notifyDataSetChanged();
+									Intent intent = new Intent(mContext, AlreadyReadBooksActivity.class);
+									intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+									mContext.startActivity(intent);
 								} else {
 									Toast.makeText(mContext, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
 								}
@@ -129,7 +136,10 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecycler
 							public void onClick(DialogInterface dialog, int which) {
 								if (Utils.removeFromCurrentlyReadingBooks(bookItem)) {
 									Toast.makeText(mContext, "Removed from currently reading books.", Toast.LENGTH_SHORT).show();
-									notifyDataSetChanged();
+									//notifyDataSetChanged();
+									Intent intent = new Intent(mContext, CurrentlyReadingBooksActivity.class);
+									intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+									mContext.startActivity(intent);
 								} else {
 									Toast.makeText(mContext, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
 								}
@@ -158,7 +168,10 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecycler
 							public void onClick(DialogInterface dialog, int which) {
 								if (Utils.removeFromFavouriteBooks(bookItem)) {
 									Toast.makeText(mContext, "Removed from favourite books.", Toast.LENGTH_SHORT).show();
-									notifyDataSetChanged();
+									//notifyDataSetChanged();
+									Intent intent = new Intent(mContext, FavouriteBooksActivity.class);
+									intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+									mContext.startActivity(intent);
 								} else {
 									Toast.makeText(mContext, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
 								}
@@ -187,7 +200,10 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecycler
 							public void onClick(DialogInterface dialog, int which) {
 								if (Utils.removeFromWishListBooks(bookItem)) {
 									Toast.makeText(mContext, "Removed from wishlist.", Toast.LENGTH_SHORT).show();
-									notifyDataSetChanged();
+									//notifyDataSetChanged();
+									Intent intent = new Intent(mContext, WishlistBooksActivity.class);
+									intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+									mContext.startActivity(intent);
 								} else {
 									Toast.makeText(mContext, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
 								}

@@ -32,4 +32,11 @@
     <string name="wishlist_label">Wishlist</string>
     <string name="favourite_books_label">Favourite books</string>
     <string name="remove_from_list">Remove from list</string>
+    <string name="all_books_activity_label">All Books</string>
+    <string name="currently_reading_activity_label">Currently Reading Books</string>
+    <string name="already_read_activity_label">Already Read Books</string>
+    <string name="wishlist_activity_label">Wishlist</string>
+    <string name="favourite_books_activity_label">Favourite Books</string>
+    <string name="book_activity_label">Book Details</string>
+    <string name="no_books_in_category">Unfortunately you don\'t have any books in this category. Try adding one from list of all books.</string>
 </resources>
