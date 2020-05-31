@@ -1,25 +1,17 @@
 package com.example.bookmanager;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 
-import com.example.bookmanager.Adapters.AllBooksRecyclerViewAdapter;
-import com.example.bookmanager.Models.Book;
-
-import java.util.ArrayList;
+import com.example.bookmanager.Adapters.BooksRecyclerViewAdapter;
 
 public class AllBooksActivity extends AppCompatActivity {
 
 	private RecyclerView allBooksRecyclerView;
-	private Button toggleListGridButton;
-	private AllBooksRecyclerViewAdapter adapter;
+	private BooksRecyclerViewAdapter adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +21,7 @@ public class AllBooksActivity extends AppCompatActivity {
 		initViews();
 
 
-		adapter = new AllBooksRecyclerViewAdapter(AllBooksActivity.this);
+		adapter = new BooksRecyclerViewAdapter(AllBooksActivity.this);
 		adapter.setBooks(Utils.getInstance().getAllBooks());
 
 		allBooksRecyclerView.setAdapter(adapter);
@@ -40,6 +32,5 @@ public class AllBooksActivity extends AppCompatActivity {
 
 	private void initViews() {
 		allBooksRecyclerView = this.findViewById(R.id.all_books_recycler_view);
-		toggleListGridButton = this.findViewById(R.id.toggle_grid_list_button);
 	}
 }

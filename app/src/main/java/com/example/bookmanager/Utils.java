@@ -51,16 +51,20 @@ public class Utils {
 		return wishListBooks.add(book);
 	}
 
-	public static void removeFromCurrentlyReadingBooks(Book book) {
-		currentlyReadingBooks.remove(book);
+	public static boolean removeFromCurrentlyReadingBooks(Book book) {
+		return currentlyReadingBooks.remove(book);
 	}
 
-	public static void removeFromAlreadyReadBooks(Book book) {
-		alreadyReadBooks.remove(book);
+	public static boolean removeFromAlreadyReadBooks(Book book) {
+		return alreadyReadBooks.remove(book);
 	}
 
-	public static void removeFromWishListBooks(Book book) {
-		wishListBooks.remove(book);
+	public static boolean removeFromWishListBooks(Book book) {
+		return wishListBooks.remove(book);
+	}
+
+	public static boolean removeFromFavouriteBooks(Book book) {
+		return favouriteBooks.remove(book);
 	}
 
 	public Book getBookById(int id) {

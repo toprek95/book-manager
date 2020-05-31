@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,12 +25,12 @@ import java.util.ArrayList;
 
 import static com.example.bookmanager.BookActivity.BOOK_ID_KEY;
 
-public class AllBooksRecyclerViewAdapter extends RecyclerView.Adapter<AllBooksRecyclerViewAdapter.MyViewHolder> {
+public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecyclerViewAdapter.MyViewHolder> {
 	private ArrayList<Book> books = new ArrayList<>();
 	private Context mContext;
-	private static final String TAG = "AllBooksRecyclerViewAda";
+	private static final String TAG = "BooksRecyclerViewAda";
 
-	public AllBooksRecyclerViewAdapter(Context mContext) {
+	public BooksRecyclerViewAdapter(Context mContext) {
 		this.mContext = mContext;
 	}
 
@@ -39,7 +38,7 @@ public class AllBooksRecyclerViewAdapter extends RecyclerView.Adapter<AllBooksRe
 	@Override
 	public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 		View view = LayoutInflater.from(parent.getContext())
-				.inflate(R.layout.all_books_recycler_view_layout_list, parent, false);
+				.inflate(R.layout.books_recycler_view_layout_list, parent, false);
 		return new MyViewHolder(view);
 
 	}
@@ -63,7 +62,6 @@ public class AllBooksRecyclerViewAdapter extends RecyclerView.Adapter<AllBooksRe
 		holder.parentCardViewList.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//TODO: Implement on book list card view click listener
 				Intent intent = new Intent(mContext, BookActivity.class);
 				intent.putExtra(BOOK_ID_KEY, bookItem.getId());
 				mContext.startActivity(intent);

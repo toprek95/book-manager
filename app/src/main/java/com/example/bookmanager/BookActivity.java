@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,16 +15,17 @@ import com.bumptech.glide.Glide;
 import com.example.bookmanager.Models.Book;
 import com.google.android.material.button.MaterialButton;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 public class BookActivity extends AppCompatActivity {
 
+	private static final String TAG = "BookActivity";
 	public static final String BOOK_ID_KEY = "bookId";
 	private ImageView bookImage;
 	private TextView bookName, authorName, numberOfPages, longDescription;
 	private MaterialButton currentlyReadingBooksButton, addToFavouritesBooksButton, alreadyReadBooksButton, addToWishListBooksButton;
-	private boolean isAlreadyReadButtonClicked = false;
-	private boolean isCurrentlyReadingButtonClicked = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -99,12 +101,20 @@ public class BookActivity extends AppCompatActivity {
 						if (finalExistsInAlreadyReadBooks) {
 							alreadyReadBooksButton.setIcon(null);
 							alreadyReadBooksButton.setClickable(true);
-							Utils.removeFromAlreadyReadBooks(currentBook);
+							if (Utils.removeFromAlreadyReadBooks(currentBook)) {
+								Log.d(TAG, "onClick: removeFromAlreadyReadBooks successful");
+							} else {
+								Log.d(TAG, "onClick: removeFromAlreadyReadBooks failed");
+							}
 						}
 						if (finalExistsInCurrentlyReadingBooks) {
 							currentlyReadingBooksButton.setIcon(null);
 							currentlyReadingBooksButton.setClickable(true);
-							Utils.removeFromCurrentlyReadingBooks(currentBook);
+							if (Utils.removeFromCurrentlyReadingBooks(currentBook)) {
+								Log.d(TAG, "onClick: removeFromCurrentlyReadingBooks successful");
+							} else {
+								Log.d(TAG, "onClick: removeFromCurrentlyReadingBooks failed");
+							}
 						}
 						Toast.makeText(BookActivity.this, "Book added to wishlist. Hope you get it soon.", Toast.LENGTH_SHORT).show();
 						//TODO: navigate user to WishListBooksActivity
@@ -165,12 +175,20 @@ public class BookActivity extends AppCompatActivity {
 						if (finalExistsInCurrentlyReadingBooks) {
 							currentlyReadingBooksButton.setIcon(null);
 							currentlyReadingBooksButton.setCheckable(true);
-							Utils.removeFromCurrentlyReadingBooks(currentBook);
+							if (Utils.removeFromCurrentlyReadingBooks(currentBook)) {
+								Log.d(TAG, "onClick: removeFromCurrentlyReadingBooks successful");
+							} else {
+								Log.d(TAG, "onClick: removeFromCurrentlyReadingBooks failed");
+							}
 						}
 						if (finalExistsInWishListBooks) {
 							addToWishListBooksButton.setIcon(null);
 							addToWishListBooksButton.setClickable(true);
-							Utils.removeFromWishListBooks(currentBook);
+							if (Utils.removeFromWishListBooks(currentBook)) {
+								Log.d(TAG, "onClick: removeFromWishListBooks successful");
+							} else {
+								Log.d(TAG, "onClick: removeFromWishListBooks failed");
+							}
 						}
 						Toast.makeText(BookActivity.this, "Congrats on reading this book.", Toast.LENGTH_SHORT).show();
 						//TODO: navigate user to AlreadyReadBooksActivity
@@ -265,13 +283,21 @@ public class BookActivity extends AppCompatActivity {
 						if (finalExistsInAlreadyReadBooks) {
 							alreadyReadBooksButton.setIcon(null);
 							alreadyReadBooksButton.setCheckable(true);
-							Utils.removeFromAlreadyReadBooks(currentBook);
+							if (Utils.removeFromAlreadyReadBooks(currentBook)) {
+								Log.d(TAG, "onClick: removeFromAlreadyReadBooks successful");
+							} else {
+								Log.d(TAG, "onClick: removeFromAlreadyReadBooks failed");
+							}
 						}
 
 						if (finalExistsInWishListBooks) {
 							addToWishListBooksButton.setIcon(null);
 							addToWishListBooksButton.setClickable(true);
-							Utils.removeFromWishListBooks(currentBook);
+							if (Utils.removeFromWishListBooks(currentBook)) {
+								Log.d(TAG, "onClick: removeFromWishListBooks successful");
+							} else {
+								Log.d(TAG, "onClick: removeFromWishListBooks failed");
+							}
 						}
 
 						Toast.makeText(BookActivity.this, "You are currently reading this book.", Toast.LENGTH_SHORT).show();
@@ -301,7 +327,7 @@ public class BookActivity extends AppCompatActivity {
 		addToWishListBooksButton = findViewById(R.id.wish_list_books_button_book_layout);
 	}
 
-	private void setBookViewData(Book book) {
+	private void setBookViewData(@NotNull Book book) {
 		bookName.setText(book.getName());
 		authorName.setText(book.getAuthor());
 		numberOfPages.setText(String.valueOf(book.getNumberOdPages()));
