@@ -117,7 +117,6 @@ public class BookActivity extends AppCompatActivity {
 							}
 						}
 						Toast.makeText(BookActivity.this, "Book added to wishlist. Hope you get it soon.", Toast.LENGTH_SHORT).show();
-						//TODO: navigate user to WishListBooksActivity
 						Intent intent = new Intent(BookActivity.this, MainActivity.class);
 						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 						startActivity(intent);
@@ -191,7 +190,6 @@ public class BookActivity extends AppCompatActivity {
 							}
 						}
 						Toast.makeText(BookActivity.this, "Congrats on reading this book.", Toast.LENGTH_SHORT).show();
-						//TODO: navigate user to AlreadyReadBooksActivity
 						Intent intent = new Intent(BookActivity.this, MainActivity.class);
 						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 						startActivity(intent);
@@ -225,7 +223,6 @@ public class BookActivity extends AppCompatActivity {
 				public void onClick(View v) {
 					if (Utils.addFavouriteBook(currentBook)) {
 						Toast.makeText(BookActivity.this, "Added to favourite books.", Toast.LENGTH_SHORT).show();
-						//TODO: navigate user to FavouriteBooksActivity
 						Intent intent = new Intent(BookActivity.this, MainActivity.class);
 						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 						startActivity(intent);
@@ -301,7 +298,6 @@ public class BookActivity extends AppCompatActivity {
 						}
 
 						Toast.makeText(BookActivity.this, "You are currently reading this book.", Toast.LENGTH_SHORT).show();
-						//TODO: navigate user to CurrentlyReadingBooksActivity
 						Intent intent = new Intent(BookActivity.this, MainActivity.class);
 						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 						startActivity(intent);

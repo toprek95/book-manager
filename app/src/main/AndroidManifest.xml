@@ -11,7 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".BookActivity"></activity>
+        <activity android:name=".FavouriteBooksActivity"></activity>
+        <activity android:name=".WishlistBooksActivity" />
+        <activity android:name=".AlreadyReadBooksActivity" />
+        <activity android:name=".CurrentlyReadingBooksActivity" />
+        <activity android:name=".BookActivity" />
         <activity android:name=".AllBooksActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -20,6 +24,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
+
 </manifest>

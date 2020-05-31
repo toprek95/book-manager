@@ -8,7 +8,7 @@
     <string name="button_currently_reading_books">Currently Reading Books</string>
     <string name="button_all_books">All Books</string>
     <string name="image_description_book_manager_logo">Book Manager Logo</string>
-    <string name="label_list_of_all_books">List of all books:</string>
+    <string name="label_list_of_all_books">List of all books</string>
     <string name="toggle_grid_view">Grid View</string>
     <string name="toggle_list_view">List View</string>
     <string name="book_name_placeholder">Book Name</string>
@@ -26,4 +26,8 @@
     <string name="add_to_favourites_button_label">Add to Favourites</string>
     <string name="description_book_layout">Description</string>
     <string name="long_description_placeholder">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent aliquam malesuada enim et vulputate. Cras lobortis lobortis cursus. Maecenas ac congue urna. Praesent at leo ante. Curabitur eu iaculis libero. Duis iaculis, erat id pellentesque tincidunt, felis mi maximus orci, sit amet viverra tellus felis consequat nibh. Nullam mattis diam eget ipsum efficitur, eu molestie mauris gravida. Sed tincidunt velit a diam ultricies venenatis. Morbi lorem purus, iaculis vel justo ut, tempus tincidunt tellus. Fusce dignissim nisi scelerisque sem tempor eleifend. Donec convallis condimentum lectus et imperdiet. Vestibulum mattis ligula rhoncus, dignissim odio sit amet, blandit diam. Curabitur varius est sagittis nisi pulvinar, vitae fringilla nibh pharetra. Praesent semper mi augue, sit amet pulvinar libero efficitur ac. Maecenas tincidunt, tortor ac vulputate elementum, dolor nisl facilisis diam, vel laoreet dolor nunc sed nulla. Nam id neque lacus.</string>
+    <string name="list_of_currently_reading_books_label">List of currently reading books</string>
+    <string name="list_of_already_read_books_label">List of already read books</string>
+    <string name="wishlist_label">Wishlist</string>
+    <string name="favourite_books_label">Favourite books</string>
 </resources>
