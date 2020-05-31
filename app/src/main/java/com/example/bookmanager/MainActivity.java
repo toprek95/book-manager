@@ -1,15 +1,19 @@
 package com.example.bookmanager;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import static com.example.bookmanager.WebsiteActivity.URL_NAME_TAG;
+
 public class MainActivity extends AppCompatActivity {
 
-	private Button allBooksButton, currentlyReadingBooks, alreadyReadBooksButton, wishlistBooksButton, favouritesBooksButton;
+	private Button allBooksButton, currentlyReadingBooks, alreadyReadBooksButton, wishlistBooksButton, favouritesBooksButton, aboutButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +68,31 @@ public class MainActivity extends AppCompatActivity {
 			}
 		});
 
+		aboutButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+				alertDialog.setTitle(getString(R.string.app_name));
+				alertDialog.setMessage(getString(R.string.app_description));
+				alertDialog.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+
+					}
+				});
+				alertDialog.setCancelable(false);
+				alertDialog.setPositiveButton("Visit", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						Intent intent = new Intent(MainActivity.this, WebsiteActivity.class);
+						intent.putExtra(URL_NAME_TAG, "https://github.com/toprek95");
+						startActivity(intent);
+					}
+				});
+				alertDialog.create().show();
+			}
+		});
+
 		//Create instance of Utils singleton class, to initialize data so you can call static methods without exception
 		Utils.getInstance();
 
@@ -75,5 +104,6 @@ public class MainActivity extends AppCompatActivity {
 		alreadyReadBooksButton = findViewById(R.id.already_read_books_button);
 		wishlistBooksButton = findViewById(R.id.wish_list_books_button);
 		favouritesBooksButton = findViewById(R.id.favourites_books_button);
+		aboutButton = findViewById(R.id.about_button);
 	}
 }

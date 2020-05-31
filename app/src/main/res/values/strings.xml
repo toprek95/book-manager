@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Book Manager</string>
+    <string name="app_description">This application is designed and developed by Aleksandar Toprek, with a little help from Android tutorials, stackoverflow.com, and randomized Google searches.</string>
     <string name="copyright">Copyright © Book Manager 2020. All rights reserved.</string>
     <string name="button_about">ABOUT</string>
     <string name="button_features">Favourites</string>
