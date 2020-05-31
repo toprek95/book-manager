@@ -19,12 +19,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
+import static com.example.bookmanager.WebsiteActivity.URL_NAME_TAG;
+
 public class BookActivity extends AppCompatActivity {
 
 	private static final String TAG = "BookActivity";
 	public static final String BOOK_ID_KEY = "bookId";
 	private ImageView bookImage;
-	private TextView bookName, authorName, numberOfPages, longDescription;
+	private TextView bookName, authorName, numberOfPages, longDescription, learnMore;
 	private MaterialButton currentlyReadingBooksButton, addToFavouritesBooksButton, alreadyReadBooksButton, addToWishListBooksButton;
 
 	@Override
@@ -39,7 +41,7 @@ public class BookActivity extends AppCompatActivity {
 		if (null != intent) {
 			int bookId = intent.getIntExtra(BOOK_ID_KEY, -1);
 			if (bookId != -1) {
-				Book selectedBook = Utils.getInstance().getBookById(bookId);
+				final Book selectedBook = Utils.getInstance().getBookById(bookId);
 				if (null != selectedBook) {
 					setBookViewData(selectedBook);
 
@@ -50,6 +52,15 @@ public class BookActivity extends AppCompatActivity {
 					handleAlreadyReadBooksButton(selectedBook);
 
 					handleAddToWishListBooksButton(selectedBook);
+
+					learnMore.setOnClickListener(new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							Intent learnMoreIntent = new Intent(BookActivity.this, WebsiteActivity.class);
+							learnMoreIntent.putExtra(URL_NAME_TAG, selectedBook.getBookWebsiteUrl());
+							startActivity(learnMoreIntent);
+						}
+					});
 				}
 			}
 		}
@@ -321,6 +332,8 @@ public class BookActivity extends AppCompatActivity {
 		addToFavouritesBooksButton = findViewById(R.id.favourites_books_button_book_layout);
 		alreadyReadBooksButton = findViewById(R.id.already_read_books_button_book_layout);
 		addToWishListBooksButton = findViewById(R.id.wish_list_books_button_book_layout);
+
+		learnMore = findViewById(R.id.learn_more_book_layout);
 	}
 
 	private void setBookViewData(@NotNull Book book) {

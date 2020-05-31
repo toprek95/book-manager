@@ -9,8 +9,9 @@ public class Book {
 	private String shortDescription;
 	private String longDescription;
 	private boolean isExpended;
+	private String bookWebsiteUrl;
 
-	public Book(int id, String name, String author, int numberOdPages, String imageUrl, String shortDescription, String longDescription) {
+	public Book(int id, String name, String author, int numberOdPages, String imageUrl, String shortDescription, String longDescription, String bookWebsiteUrl) {
 		this.id = id;
 		this.name = name;
 		this.author = author;
@@ -18,6 +19,7 @@ public class Book {
 		this.imageUrl = imageUrl;
 		this.shortDescription = shortDescription;
 		this.longDescription = longDescription;
+		this.bookWebsiteUrl = bookWebsiteUrl;
 		this.isExpended = false;
 	}
 
@@ -85,6 +87,14 @@ public class Book {
 		this.longDescription = longDescription;
 	}
 
+	public String getBookWebsiteUrl() {
+		return bookWebsiteUrl;
+	}
+
+	public void setBookWebsiteUrl(String bookWebsiteUrl) {
+		this.bookWebsiteUrl = bookWebsiteUrl;
+	}
+
 	@Override
 	public String toString() {
 		return "Book{" +
@@ -95,6 +105,7 @@ public class Book {
 				", imageUrl='" + imageUrl + '\'' +
 				", shortDescription='" + shortDescription + '\'' +
 				", longDescription='" + longDescription + '\'' +
+				", bookWebsiteUrl='" + bookWebsiteUrl + '\'' +
 				'}';
 	}
 }
