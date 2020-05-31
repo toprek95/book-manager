@@ -12,6 +12,7 @@ public class AllBooksActivity extends AppCompatActivity {
 
 	private RecyclerView allBooksRecyclerView;
 	private BooksRecyclerViewAdapter adapter;
+	public static final String ALL_BOOKS_ACTIVITY_NAME = "allBooks";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -21,8 +22,8 @@ public class AllBooksActivity extends AppCompatActivity {
 		initViews();
 
 
-		adapter = new BooksRecyclerViewAdapter(AllBooksActivity.this);
-		adapter.setBooks(Utils.getInstance().getAllBooks());
+		adapter = new BooksRecyclerViewAdapter(AllBooksActivity.this, ALL_BOOKS_ACTIVITY_NAME);
+		adapter.setBooks(Utils.minimize(Utils.getAllBooks()));
 
 		allBooksRecyclerView.setAdapter(adapter);
 		allBooksRecyclerView.setLayoutManager(new LinearLayoutManager(this));

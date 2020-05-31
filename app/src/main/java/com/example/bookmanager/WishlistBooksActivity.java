@@ -10,6 +10,7 @@ import com.example.bookmanager.Adapters.BooksRecyclerViewAdapter;
 
 public class WishlistBooksActivity extends AppCompatActivity {
 
+	public static final String WISHLIST_BOOKS_ACTIVITY_NAME = "wishlistBooks";
 	private RecyclerView wishlistBooksRecyclerView;
 	private BooksRecyclerViewAdapter adapter;
 
@@ -19,9 +20,9 @@ public class WishlistBooksActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_wishlist_books);
 
 		wishlistBooksRecyclerView = findViewById(R.id.wishlist_books_recycler_view);
-		adapter = new BooksRecyclerViewAdapter(this);
+		adapter = new BooksRecyclerViewAdapter(this, WISHLIST_BOOKS_ACTIVITY_NAME);
 
-		adapter.setBooks(Utils.getInstance().getWishListBooks());
+		adapter.setBooks(Utils.minimize(Utils.getWishListBooks()));
 
 		wishlistBooksRecyclerView.setAdapter(adapter);
 		wishlistBooksRecyclerView.setLayoutManager(new LinearLayoutManager(this));

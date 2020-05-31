@@ -11,6 +11,7 @@ import com.example.bookmanager.Adapters.BooksRecyclerViewAdapter;
 
 public class CurrentlyReadingBooksActivity extends AppCompatActivity {
 
+	public static final String CURRENTLY_READING_BOOKS_ACTIVITY_NAME = "currentlyReadingBooks";
 	private RecyclerView currentlyReadingBooksRecyclerView;
 	private BooksRecyclerViewAdapter adapter;
 
@@ -20,9 +21,9 @@ public class CurrentlyReadingBooksActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_currently_reading_books);
 
 		currentlyReadingBooksRecyclerView = findViewById(R.id.currently_reading_books_recycler_view);
-		adapter = new BooksRecyclerViewAdapter(CurrentlyReadingBooksActivity.this);
+		adapter = new BooksRecyclerViewAdapter(CurrentlyReadingBooksActivity.this, CURRENTLY_READING_BOOKS_ACTIVITY_NAME);
 
-		adapter.setBooks(Utils.getInstance().getCurrentlyReadingBooks());
+		adapter.setBooks(Utils.minimize(Utils.getCurrentlyReadingBooks()));
 
 		currentlyReadingBooksRecyclerView.setAdapter(adapter);
 		currentlyReadingBooksRecyclerView.setLayoutManager(new LinearLayoutManager(this));

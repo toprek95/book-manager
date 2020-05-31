@@ -1,6 +1,7 @@
 package com.example.bookmanager.Adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,8 +11,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.TransitionManager;
 
@@ -19,19 +22,27 @@ import com.bumptech.glide.Glide;
 import com.example.bookmanager.BookActivity;
 import com.example.bookmanager.Models.Book;
 import com.example.bookmanager.R;
+import com.example.bookmanager.Utils;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 
+import static com.example.bookmanager.AllBooksActivity.ALL_BOOKS_ACTIVITY_NAME;
+import static com.example.bookmanager.AlreadyReadBooksActivity.ALREADY_READ_BOOKS_ACTIVITY_NAME;
 import static com.example.bookmanager.BookActivity.BOOK_ID_KEY;
+import static com.example.bookmanager.CurrentlyReadingBooksActivity.CURRENTLY_READING_BOOKS_ACTIVITY_NAME;
+import static com.example.bookmanager.FavouriteBooksActivity.FAVOURITE_BOOKS_ACTIVITY_NAME;
+import static com.example.bookmanager.WishlistBooksActivity.WISHLIST_BOOKS_ACTIVITY_NAME;
 
 public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecyclerViewAdapter.MyViewHolder> {
 	private ArrayList<Book> books = new ArrayList<>();
 	private Context mContext;
 	private static final String TAG = "BooksRecyclerViewAda";
+	private String parentActivity;
 
-	public BooksRecyclerViewAdapter(Context mContext) {
+	public BooksRecyclerViewAdapter(Context mContext, String parentActivity) {
 		this.mContext = mContext;
+		this.parentActivity = parentActivity;
 	}
 
 	@NonNull
@@ -74,6 +85,126 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecycler
 			TransitionManager.beginDelayedTransition(holder.parentCardViewList);
 			holder.downArrow.setVisibility(View.GONE);
 			holder.expendedBooksContainer.setVisibility(View.VISIBLE);
+
+			if (parentActivity.equals(ALL_BOOKS_ACTIVITY_NAME)) {
+				holder.removeFromList.setVisibility(View.GONE);
+			} else if (parentActivity.equals(ALREADY_READ_BOOKS_ACTIVITY_NAME)) {
+				holder.removeFromList.setVisibility(View.VISIBLE);
+				holder.removeFromList.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+						alertDialog.setMessage("Are you sure you want to remove \"" + bookItem.getName() + "\" from already read books?");
+						alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								if (Utils.removeFromAlreadyReadBooks(bookItem)) {
+									Toast.makeText(mContext, "Removed from already read books.", Toast.LENGTH_SHORT).show();
+									notifyDataSetChanged();
+								} else {
+									Toast.makeText(mContext, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
+								}
+							}
+						});
+						alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+
+							}
+						});
+						alertDialog.create().show();
+					}
+				});
+
+			} else if (parentActivity.equals(CURRENTLY_READING_BOOKS_ACTIVITY_NAME)) {
+
+				holder.removeFromList.setVisibility(View.VISIBLE);
+				holder.removeFromList.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+						alertDialog.setMessage("Are you sure you want to remove \"" + bookItem.getName() + "\" from currently reading books?");
+						alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								if (Utils.removeFromCurrentlyReadingBooks(bookItem)) {
+									Toast.makeText(mContext, "Removed from currently reading books.", Toast.LENGTH_SHORT).show();
+									notifyDataSetChanged();
+								} else {
+									Toast.makeText(mContext, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
+								}
+							}
+						});
+						alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+
+							}
+						});
+						alertDialog.create().show();
+					}
+				});
+
+			} else if (parentActivity.equals(FAVOURITE_BOOKS_ACTIVITY_NAME)) {
+
+				holder.removeFromList.setVisibility(View.VISIBLE);
+				holder.removeFromList.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+						alertDialog.setMessage("Are you sure you want to remove \"" + bookItem.getName() + "\" from your favourite books?");
+						alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								if (Utils.removeFromFavouriteBooks(bookItem)) {
+									Toast.makeText(mContext, "Removed from favourite books.", Toast.LENGTH_SHORT).show();
+									notifyDataSetChanged();
+								} else {
+									Toast.makeText(mContext, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
+								}
+							}
+						});
+						alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+
+							}
+						});
+						alertDialog.create().show();
+					}
+				});
+
+			} else if (parentActivity.equals(WISHLIST_BOOKS_ACTIVITY_NAME)) {
+
+				holder.removeFromList.setVisibility(View.VISIBLE);
+				holder.removeFromList.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+						alertDialog.setMessage("Are you sure you want to remove \"" + bookItem.getName() + "\" from your wishlist?");
+						alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								if (Utils.removeFromWishListBooks(bookItem)) {
+									Toast.makeText(mContext, "Removed from wishlist.", Toast.LENGTH_SHORT).show();
+									notifyDataSetChanged();
+								} else {
+									Toast.makeText(mContext, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
+								}
+							}
+						});
+						alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+
+							}
+						});
+						alertDialog.create().show();
+					}
+				});
+
+			}
+
 		} else {
 			TransitionManager.beginDelayedTransition(holder.parentCardViewList);
 			holder.downArrow.setVisibility(View.VISIBLE);
@@ -100,6 +231,7 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecycler
 		private ImageView downArrow, upArrow;
 		private LinearLayout collapsedBooksContainer;
 		private RelativeLayout expendedBooksContainer;
+		private TextView removeFromList;
 
 
 		public MyViewHolder(@NonNull View itemView) {
@@ -118,6 +250,8 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecycler
 			expendedBooksContainer = itemView.findViewById(R.id.expanded_books_container);
 
 			shortBookDescription = itemView.findViewById(R.id.short_book_description);
+
+			removeFromList = itemView.findViewById(R.id.remove_from_list);
 
 			downArrow.setOnClickListener(new View.OnClickListener() {
 				@Override

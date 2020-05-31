@@ -30,4 +30,5 @@
     <string name="list_of_already_read_books_label">List of already read books</string>
     <string name="wishlist_label">Wishlist</string>
     <string name="favourite_books_label">Favourite books</string>
+    <string name="remove_from_list">Remove from list</string>
 </resources>

@@ -67,6 +67,13 @@ public class Utils {
 		return favouriteBooks.remove(book);
 	}
 
+	public static ArrayList<Book> minimize (ArrayList<Book> books) {
+		for (Book book: books) {
+			book.setExpended(false);
+		}
+		return books;
+	}
+
 	public Book getBookById(int id) {
 
 		for (Book book : allBooks) {
@@ -219,23 +226,23 @@ public class Utils {
 
 	}
 
-	public ArrayList<Book> getAllBooks() {
+	public static ArrayList<Book> getAllBooks() {
 		return allBooks;
 	}
 
-	public ArrayList<Book> getFavouriteBooks() {
+	public static ArrayList<Book> getFavouriteBooks() {
 		return favouriteBooks;
 	}
 
-	public ArrayList<Book> getAlreadyReadBooks() {
+	public static ArrayList<Book> getAlreadyReadBooks() {
 		return alreadyReadBooks;
 	}
 
-	public ArrayList<Book> getWishListBooks() {
+	public static ArrayList<Book> getWishListBooks() {
 		return wishListBooks;
 	}
 
-	public ArrayList<Book> getCurrentlyReadingBooks() {
+	public static ArrayList<Book> getCurrentlyReadingBooks() {
 		return currentlyReadingBooks;
 	}
 }
