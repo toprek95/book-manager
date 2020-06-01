@@ -38,5 +38,6 @@
     <string name="wishlist_activity_label">Wishlist</string>
     <string name="favourite_books_activity_label">Favourite Books</string>
     <string name="book_activity_label">Book Details</string>
+    <string name="add_new_book_activity_label">Add New Book</string>
     <string name="no_books_in_category">Unfortunately you don\'t have any books in this category. Try adding one from list of all books.</string>
 </resources>

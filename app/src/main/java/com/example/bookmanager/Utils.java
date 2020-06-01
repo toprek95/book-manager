@@ -55,6 +55,21 @@ public class Utils {
 		}
 	}
 
+	public boolean addNewBook(Book book) {
+		ArrayList<Book> books = getAllBooks();
+		if (null != books) {
+			if (books.add(book)) {
+				Gson gson = new Gson();
+				SharedPreferences.Editor editor = sharedPreferences.edit();
+				editor.remove(ALL_BOOKS_KEY);
+				editor.putString(ALL_BOOKS_KEY, gson.toJson(books));
+				editor.commit();
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public boolean addCurrentlyReadingBook(Book book) {
 		ArrayList<Book> books = getCurrentlyReadingBooks();
 		if (null != books) {
@@ -110,6 +125,30 @@ public class Utils {
 				editor.putString(WISHLIST_BOOKS_KEY, gson.toJson(books));
 				editor.commit();
 				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean removeFromAllBooks(Book book) {
+		ArrayList<Book> books = getAllBooks();
+		if (null != books) {
+			for (Book b : books) {
+				if (b.getId() == book.getId()) {
+					if (books.remove(b)) {
+						Gson gson = new Gson();
+						SharedPreferences.Editor editor = sharedPreferences.edit();
+						editor.remove(ALL_BOOKS_KEY);
+						editor.putString(ALL_BOOKS_KEY, gson.toJson(books));
+						editor.commit();
+						//Also remove from all the lists
+						removeFromAlreadyReadBooks(book);
+						removeFromCurrentlyReadingBooks(book);
+						removeFromFavouriteBooks(book);
+						removeFromWishListBooks(book);
+						return true;
+					}
+				}
 			}
 		}
 		return false;
@@ -209,6 +248,29 @@ public class Utils {
 			}
 		}
 		return null;
+	}
+
+	public int getNextId () {
+		ArrayList<Book> books = getAllBooks();
+		ArrayList<Integer> ids = new ArrayList<>();
+		if (null != books) {
+			for (Book b: books) {
+				ids.add(b.getId());
+			}
+			if (!ids.isEmpty()) {
+				int maxId = 0;
+				for (int i : ids) {
+					if (i > maxId) {
+						maxId = i;
+					}
+				}
+				return maxId + 1;
+			} else {
+				return 1;
+			}
+		}
+
+		return -1;
 	}
 
 	public static synchronized Utils getInstance(Context context) {

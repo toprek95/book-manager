@@ -1,10 +1,15 @@
 package com.example.bookmanager;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -28,6 +33,7 @@ public class BookActivity extends AppCompatActivity {
 	private ImageView bookImage;
 	private TextView bookName, authorName, numberOfPages, longDescription, learnMore;
 	private MaterialButton currentlyReadingBooksButton, addToFavouritesBooksButton, alreadyReadBooksButton, addToWishListBooksButton;
+	private Book book;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +49,8 @@ public class BookActivity extends AppCompatActivity {
 			if (bookId != -1) {
 				final Book selectedBook = Utils.getInstance(this).getBookById(bookId);
 				if (null != selectedBook) {
+					book = selectedBook;
+
 					setBookViewData(selectedBook);
 
 					handleCurrentlyReadingBooksButton(selectedBook);
@@ -346,5 +354,50 @@ public class BookActivity extends AppCompatActivity {
 				.asBitmap()
 				.load(book.getImageUrl())
 				.into(bookImage);
+	}
+
+	private void showAlertDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(BookActivity.this);
+		builder.setTitle("Remove book");
+		builder.setMessage("Do you really want to delete this book?");
+		builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				if (Utils.getInstance(BookActivity.this).removeFromAllBooks(book)) {
+					Toast.makeText(BookActivity.this, "Book deleted", Toast.LENGTH_SHORT).show();
+					Intent intent = new Intent(BookActivity.this, AllBooksActivity.class);
+					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+					startActivity(intent);
+				} else {
+					Toast.makeText(BookActivity.this, "Something went wrong. Plese try again.", Toast.LENGTH_SHORT).show();
+				}
+
+			}
+		});
+		builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+
+			}
+		});
+		builder.setCancelable(false);
+		builder.setIcon(R.drawable.ic_warning);
+		builder.create().show();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_remove, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+		if (item.getItemId() == R.id.action_remove_book) {
+			showAlertDialog();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+
 	}
 }

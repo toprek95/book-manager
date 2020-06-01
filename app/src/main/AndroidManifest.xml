@@ -11,19 +11,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".WebsiteActivity"></activity>
-        <activity android:name=".FavouriteBooksActivity"
-            android:label="@string/favourite_books_activity_label"/>
-        <activity android:name=".WishlistBooksActivity"
-            android:label="@string/wishlist_activity_label"/>
-        <activity android:name=".AlreadyReadBooksActivity"
-            android:label="@string/already_read_activity_label"/>
-        <activity android:name=".CurrentlyReadingBooksActivity"
-            android:label="@string/currently_reading_activity_label"/>
-        <activity android:name=".BookActivity"
-            android:label="@string/book_activity_label"/>
-        <activity android:name=".AllBooksActivity"
-            android:label="@string/all_books_activity_label"/>
+        <activity
+            android:name=".AddNewBookActivity"
+            android:label="@string/add_new_book_activity_label" />
+        <activity android:name=".WebsiteActivity" />
+        <activity
+            android:name=".FavouriteBooksActivity"
+            android:label="@string/favourite_books_activity_label" />
+        <activity
+            android:name=".WishlistBooksActivity"
+            android:label="@string/wishlist_activity_label" />
+        <activity
+            android:name=".AlreadyReadBooksActivity"
+            android:label="@string/already_read_activity_label" />
+        <activity
+            android:name=".CurrentlyReadingBooksActivity"
+            android:label="@string/currently_reading_activity_label" />
+        <activity
+            android:name=".BookActivity"
+            android:label="@string/book_activity_label" />
+        <activity
+            android:name=".AllBooksActivity"
+            android:label="@string/all_books_activity_label" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

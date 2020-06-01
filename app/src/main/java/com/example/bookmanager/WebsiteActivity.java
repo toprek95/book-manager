@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -18,6 +19,7 @@ public class WebsiteActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_website);
 
 		webView = findViewById(R.id.website_web_view);
+		webView.getSettings().setJavaScriptEnabled(true);
 		Intent intent = getIntent();
 
 		if (null != intent) {
@@ -26,8 +28,16 @@ public class WebsiteActivity extends AppCompatActivity {
 		} else {
 			webView.loadUrl("https://www.google.com/");
 		}
-		webView.setWebViewClient(new WebViewClient());
-		webView.getSettings().setJavaScriptEnabled(true);
+		webView.setWebViewClient(new WebViewClient() {
+
+			@Override
+			public void onPageFinished(WebView view, String url) {
+				//Hide loading dialog
+				findViewById(R.id.website_web_view).setVisibility(View.VISIBLE);
+				// Show web view
+				findViewById(R.id.website_loading_panel).setVisibility(View.GONE);
+			}
+		});
 	}
 
 	@Override
