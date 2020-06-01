@@ -28,7 +28,7 @@ public class WishlistBooksActivity extends AppCompatActivity {
 		initViews();
 
 		adapter = new BooksRecyclerViewAdapter(this, WISHLIST_BOOKS_ACTIVITY_NAME);
-		adapter.setBooks(Utils.minimize(Utils.getWishListBooks()));
+		adapter.setBooks(Utils.minimize(Utils.getInstance(this).getWishListBooks()));
 
 		checkWishlistBooksStatus();
 
@@ -43,7 +43,7 @@ public class WishlistBooksActivity extends AppCompatActivity {
 	}
 
 	public void checkWishlistBooksStatus() {
-		if (Utils.getWishListBooks().isEmpty()) {
+		if (Utils.getInstance(this).getWishListBooks().isEmpty()) {
 			noBooksLayout.setVisibility(View.VISIBLE);
 			noBooksButton.setOnClickListener(new View.OnClickListener() {
 				@Override

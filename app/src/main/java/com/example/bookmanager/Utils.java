@@ -1,70 +1,194 @@
 package com.example.bookmanager;
 
-import com.example.bookmanager.Models.Book;
+import android.content.Context;
+import android.content.SharedPreferences;
 
+import com.example.bookmanager.Models.Book;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class Utils {
 
+	private static final String PREFERENCE_NAME = "alternative_db";
+	private static final String ALL_BOOKS_KEY = "all_books";
+	private static final String FAVOURITE_BOOKS_KEY = "favourite_books";
+	private static final String ALREADY_READ_BOOKS_KEY = "already_read_books";
+	private static final String WISHLIST_BOOKS_KEY = "wishlist_books";
+	private static final String CURRENTLY_READING_BOOKS_KEY = "currently_reading_books";
 	private static Utils instance;
+	private SharedPreferences sharedPreferences;
 
-	private static ArrayList<Book> allBooks, favouriteBooks, alreadyReadBooks, wishListBooks, currentlyReadingBooks;
+//	private static ArrayList<Book> allBooks, favouriteBooks, alreadyReadBooks, wishListBooks, currentlyReadingBooks;
 
-	private Utils() {
+	private Utils(Context context) {
 
-		if (null == allBooks) {
-			allBooks = new ArrayList<>();
+		sharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+
+		if (null == getAllBooks()) {
 			initData();
 		}
 
-		if (null == favouriteBooks) {
-			favouriteBooks = new ArrayList<>();
+		SharedPreferences.Editor editor = sharedPreferences.edit();
+		Gson gson = new Gson();
+
+		if (null == getFavouriteBooks()) {
+			editor.putString(FAVOURITE_BOOKS_KEY,gson.toJson(new ArrayList<Book>()));
+			editor.commit();
 		}
 
-		if (null == alreadyReadBooks) {
-			alreadyReadBooks = new ArrayList<>();
+		if (null == getAlreadyReadBooks()) {
+			editor.putString(ALREADY_READ_BOOKS_KEY,gson.toJson(new ArrayList<Book>()));
+			editor.commit();
 		}
 
-		if (null == wishListBooks) {
-			wishListBooks = new ArrayList<>();
+		if (null == getWishListBooks()) {
+			editor.putString(WISHLIST_BOOKS_KEY,gson.toJson(new ArrayList<Book>()));
+			editor.commit();
 		}
 
-		if (null == currentlyReadingBooks) {
-			currentlyReadingBooks = new ArrayList<>();
+		if (null == getCurrentlyReadingBooks()) {
+			editor.putString(CURRENTLY_READING_BOOKS_KEY,gson.toJson(new ArrayList<Book>()));
+			editor.commit();
 		}
-
 	}
 
-	public static boolean addCurrentlyReadingBook(Book book) {
-		return currentlyReadingBooks.add(book);
+	public boolean addCurrentlyReadingBook(Book book) {
+		ArrayList<Book> books = getCurrentlyReadingBooks();
+		if (null != books) {
+			if (books.add(book)) {
+				Gson gson = new Gson();
+				SharedPreferences.Editor editor = sharedPreferences.edit();
+				editor.remove(CURRENTLY_READING_BOOKS_KEY);
+				editor.putString(CURRENTLY_READING_BOOKS_KEY, gson.toJson(books));
+				editor.commit();
+				return true;
+			}
+		}
+		return false;
 	}
 
-	public static boolean addFavouriteBook(Book book) {
-		return favouriteBooks.add(book);
+	public boolean addFavouriteBook(Book book) {
+		ArrayList<Book> books = getFavouriteBooks();
+		if (null != books) {
+			if (books.add(book)) {
+				Gson gson = new Gson();
+				SharedPreferences.Editor editor = sharedPreferences.edit();
+				editor.remove(FAVOURITE_BOOKS_KEY);
+				editor.putString(FAVOURITE_BOOKS_KEY, gson.toJson(books));
+				editor.commit();
+				return true;
+			}
+		}
+		return false;
 	}
 
-	public static boolean addAlreadyReadBook(Book book) {
-		return alreadyReadBooks.add(book);
+	public boolean addAlreadyReadBook(Book book) {
+		ArrayList<Book> books = getAlreadyReadBooks();
+		if (null != books) {
+			if (books.add(book)) {
+				Gson gson = new Gson();
+				SharedPreferences.Editor editor = sharedPreferences.edit();
+				editor.remove(ALREADY_READ_BOOKS_KEY);
+				editor.putString(ALREADY_READ_BOOKS_KEY, gson.toJson(books));
+				editor.commit();
+				return true;
+			}
+		}
+		return false;
 	}
 
-	public static boolean addWishListBook(Book book) {
-		return wishListBooks.add(book);
+	public boolean addWishListBook(Book book) {
+		ArrayList<Book> books = getWishListBooks();
+		if (null != books) {
+			if (books.add(book)) {
+				Gson gson = new Gson();
+				SharedPreferences.Editor editor = sharedPreferences.edit();
+				editor.remove(WISHLIST_BOOKS_KEY);
+				editor.putString(WISHLIST_BOOKS_KEY, gson.toJson(books));
+				editor.commit();
+				return true;
+			}
+		}
+		return false;
 	}
 
-	public static boolean removeFromCurrentlyReadingBooks(Book book) {
-		return currentlyReadingBooks.remove(book);
+	public boolean removeFromCurrentlyReadingBooks(Book book) {
+		ArrayList<Book> books = getCurrentlyReadingBooks();
+		if (null != books) {
+			for (Book b : books) {
+				if (b.getId() == book.getId()) {
+					if (books.remove(b)) {
+						Gson gson = new Gson();
+						SharedPreferences.Editor editor = sharedPreferences.edit();
+						editor.remove(CURRENTLY_READING_BOOKS_KEY);
+						editor.putString(CURRENTLY_READING_BOOKS_KEY, gson.toJson(books));
+						editor.commit();
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
-	public static boolean removeFromAlreadyReadBooks(Book book) {
-		return alreadyReadBooks.remove(book);
+	public boolean removeFromAlreadyReadBooks(Book book) {
+		ArrayList<Book> books = getAlreadyReadBooks();
+		if (null != books) {
+			for (Book b : books) {
+				if (b.getId() == book.getId()) {
+					if (books.remove(b)) {
+						Gson gson = new Gson();
+						SharedPreferences.Editor editor = sharedPreferences.edit();
+						editor.remove(ALREADY_READ_BOOKS_KEY);
+						editor.putString(ALREADY_READ_BOOKS_KEY, gson.toJson(books));
+						editor.commit();
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
-	public static boolean removeFromWishListBooks(Book book) {
-		return wishListBooks.remove(book);
+	public boolean removeFromWishListBooks(Book book) {
+		ArrayList<Book> books = getWishListBooks();
+		if (null != books) {
+			for (Book b : books) {
+				if (b.getId() == book.getId()) {
+					if (books.remove(b)) {
+						Gson gson = new Gson();
+						SharedPreferences.Editor editor = sharedPreferences.edit();
+						editor.remove(WISHLIST_BOOKS_KEY);
+						editor.putString(WISHLIST_BOOKS_KEY, gson.toJson(books));
+						editor.commit();
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
-	public static boolean removeFromFavouriteBooks(Book book) {
-		return favouriteBooks.remove(book);
+	public boolean removeFromFavouriteBooks(Book book) {
+		ArrayList<Book> books = getFavouriteBooks();
+		if (null != books) {
+			for (Book b : books) {
+				if (b.getId() == book.getId()) {
+					if (books.remove(b)) {
+						Gson gson = new Gson();
+						SharedPreferences.Editor editor = sharedPreferences.edit();
+						editor.remove(FAVOURITE_BOOKS_KEY);
+						editor.putString(FAVOURITE_BOOKS_KEY, gson.toJson(books));
+						editor.commit();
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	public static ArrayList<Book> minimize (ArrayList<Book> books) {
@@ -76,26 +200,29 @@ public class Utils {
 
 	public Book getBookById(int id) {
 
-		for (Book book : allBooks) {
-			if (book.getId() == id) {
-				return book;
+		ArrayList<Book> books = getAllBooks();
+		if (null != books) {
+			for (Book book : books) {
+				if (book.getId() == id) {
+					return book;
+				}
 			}
 		}
 		return null;
 	}
 
-	public static synchronized Utils getInstance() {
-		if (null != instance) {
-			return instance;
-		} else {
-			instance = new Utils();
-			return instance;
+	public static synchronized Utils getInstance(Context context) {
+		if (null == instance) {
+			instance = new Utils(context);
 		}
+		return instance;
 	}
 
 	private void initData() {
 
-		allBooks.add(new Book(1,
+		ArrayList<Book> books = new ArrayList<>();
+
+		books.add(new Book(1,
 				"Na Drini ćuprija",
 				"Ivo Andrić",
 				333,
@@ -103,7 +230,7 @@ public class Utils {
 				"Kameni most iz XVI veka, zadužbina Mehmed paše Sokolovića, kao nemi svedok pamti prividno slaganje različitih kultura, vera i naroda dok među njima u stvari vlada antagonizam.",
 				"Kameni most iz XVI veka, zadužbina Mehmed paše Sokolovića, kao nemi svedok pamti prividno slaganje različitih kultura, vera i naroda dok među njima u stvari vlada antagonizam. Najvidljivija je razlika između dve civilizacije, istočne i zapadne. Most je, između građenja i delimičnog rušenja početkom XX veka, bio jedina postojana i nepromenljiva tačka o koju se odbijaju sve napetosti i komešanja koja rađaju sukobe među ljudima, kulturama, verama i tadašnjim carstvima. Upravo tu činjenicu Ivo Andrić koristi da napravi fantastičan pripovijedački luk dug četiri stotine godina od gotovo kristalno čistog literarnog stila, čineći da most postane deo naših sopstvenih života.",
 				"https://www.knjizarakultura.com/proizvod/na-drini-aeuprija-tp-sezam-andriae-ivosezam-book/"));
-		allBooks.add(new Book(2,
+		books.add(new Book(2,
 				"Zločin i kazna",
 				"Fjodor Dosrojevski",
 				714,
@@ -112,7 +239,7 @@ public class Utils {
 				"Roman Zločin i kazna izgrađen je na fabuli koju poznajemo iz kriminalističkog štiva, s tom bitnom razlikom što ovdje već na početku djela saznajemo ko je ubojica, pa i šta ga je sve navelo na zločin. Zločin i kazna nije samo roman o pojedinačnom ljudskom karakteru ni samo psihološki roman ni roman o socijalno motiviranom karakteru već je sve to ali i mnogo više od toga. Djelo je u programu lektire za III razred gimnazije i sličnih srednjih škola.",
 				"https://www.delfi.rs/knjige/139253_zlocin_i_kazna_knjiga_delfi_knjizare.html"));
 
-		allBooks.add(new Book(3,
+		books.add(new Book(3,
 				"Na Drini ćuprija",
 				"Ivo Andrić",
 				333,
@@ -121,7 +248,7 @@ public class Utils {
 				"Kameni most iz XVI veka, zadužbina Mehmed paše Sokolovića, kao nemi svedok pamti prividno slaganje različitih kultura, vera i naroda dok među njima u stvari vlada antagonizam. Najvidljivija je razlika između dve civilizacije, istočne i zapadne. Most je, između građenja i delimičnog rušenja početkom XX veka, bio jedina postojana i nepromenljiva tačka o koju se odbijaju sve napetosti i komešanja koja rađaju sukobe među ljudima, kulturama, verama i tadašnjim carstvima. Upravo tu činjenicu Ivo Andrić koristi da napravi fantastičan pripovijedački luk dug četiri stotine godina od gotovo kristalno čistog literarnog stila, čineći da most postane deo naših sopstvenih života.",
 				"https://www.knjizarakultura.com/proizvod/na-drini-aeuprija-tp-sezam-andriae-ivosezam-book/"));
 
-		allBooks.add(new Book(4,
+		books.add(new Book(4,
 				"Zločin i kazna",
 				"Fjodor Dosrojevski",
 				714,
@@ -130,7 +257,7 @@ public class Utils {
 				"Roman Zločin i kazna izgrađen je na fabuli koju poznajemo iz kriminalističkog štiva, s tom bitnom razlikom što ovdje već na početku djela saznajemo ko je ubojica, pa i šta ga je sve navelo na zločin. Zločin i kazna nije samo roman o pojedinačnom ljudskom karakteru ni samo psihološki roman ni roman o socijalno motiviranom karakteru već je sve to ali i mnogo više od toga. Djelo je u programu lektire za III razred gimnazije i sličnih srednjih škola.",
 				"https://www.delfi.rs/knjige/139253_zlocin_i_kazna_knjiga_delfi_knjizare.html"));
 
-		allBooks.add(new Book(5,
+		books.add(new Book(5,
 				"Na Drini ćuprija",
 				"Ivo Andrić",
 				333,
@@ -139,7 +266,7 @@ public class Utils {
 				"Kameni most iz XVI veka, zadužbina Mehmed paše Sokolovića, kao nemi svedok pamti prividno slaganje različitih kultura, vera i naroda dok među njima u stvari vlada antagonizam. Najvidljivija je razlika između dve civilizacije, istočne i zapadne. Most je, između građenja i delimičnog rušenja početkom XX veka, bio jedina postojana i nepromenljiva tačka o koju se odbijaju sve napetosti i komešanja koja rađaju sukobe među ljudima, kulturama, verama i tadašnjim carstvima. Upravo tu činjenicu Ivo Andrić koristi da napravi fantastičan pripovijedački luk dug četiri stotine godina od gotovo kristalno čistog literarnog stila, čineći da most postane deo naših sopstvenih života.",
 				"https://www.knjizarakultura.com/proizvod/na-drini-aeuprija-tp-sezam-andriae-ivosezam-book/"));
 
-		allBooks.add(new Book(6,
+		books.add(new Book(6,
 				"Zločin i kazna",
 				"Fjodor Dosrojevski",
 				714,
@@ -148,7 +275,7 @@ public class Utils {
 				"Roman Zločin i kazna izgrađen je na fabuli koju poznajemo iz kriminalističkog štiva, s tom bitnom razlikom što ovdje već na početku djela saznajemo ko je ubojica, pa i šta ga je sve navelo na zločin. Zločin i kazna nije samo roman o pojedinačnom ljudskom karakteru ni samo psihološki roman ni roman o socijalno motiviranom karakteru već je sve to ali i mnogo više od toga. Djelo je u programu lektire za III razred gimnazije i sličnih srednjih škola.",
 				"https://www.delfi.rs/knjige/139253_zlocin_i_kazna_knjiga_delfi_knjizare.html"));
 
-		allBooks.add(new Book(7,
+		books.add(new Book(7,
 				"Na Drini ćuprija",
 				"Ivo Andrić",
 				333,
@@ -157,7 +284,7 @@ public class Utils {
 				"Kameni most iz XVI veka, zadužbina Mehmed paše Sokolovića, kao nemi svedok pamti prividno slaganje različitih kultura, vera i naroda dok među njima u stvari vlada antagonizam. Najvidljivija je razlika između dve civilizacije, istočne i zapadne. Most je, između građenja i delimičnog rušenja početkom XX veka, bio jedina postojana i nepromenljiva tačka o koju se odbijaju sve napetosti i komešanja koja rađaju sukobe među ljudima, kulturama, verama i tadašnjim carstvima. Upravo tu činjenicu Ivo Andrić koristi da napravi fantastičan pripovijedački luk dug četiri stotine godina od gotovo kristalno čistog literarnog stila, čineći da most postane deo naših sopstvenih života.",
 				"https://www.delfi.rs/knjige/90011_na_drini_cuprija_knjiga_delfi_knjizare.html"));
 
-		allBooks.add(new Book(8,
+		books.add(new Book(8,
 				"Zločin i kazna",
 				"Fjodor Dosrojevski",
 				714,
@@ -166,7 +293,7 @@ public class Utils {
 				"Roman Zločin i kazna izgrađen je na fabuli koju poznajemo iz kriminalističkog štiva, s tom bitnom razlikom što ovdje već na početku djela saznajemo ko je ubojica, pa i šta ga je sve navelo na zločin. Zločin i kazna nije samo roman o pojedinačnom ljudskom karakteru ni samo psihološki roman ni roman o socijalno motiviranom karakteru već je sve to ali i mnogo više od toga. Djelo je u programu lektire za III razred gimnazije i sličnih srednjih škola.",
 				"https://www.knjizarakultura.com/proizvod/na-drini-aeuprija-tp-sezam-andriae-ivosezam-book/"));
 
-		allBooks.add(new Book(9,
+		books.add(new Book(9,
 				"Na Drini ćuprija",
 				"Ivo Andrić",
 				333,
@@ -175,7 +302,7 @@ public class Utils {
 				"Kameni most iz XVI veka, zadužbina Mehmed paše Sokolovića, kao nemi svedok pamti prividno slaganje različitih kultura, vera i naroda dok među njima u stvari vlada antagonizam. Najvidljivija je razlika između dve civilizacije, istočne i zapadne. Most je, između građenja i delimičnog rušenja početkom XX veka, bio jedina postojana i nepromenljiva tačka o koju se odbijaju sve napetosti i komešanja koja rađaju sukobe među ljudima, kulturama, verama i tadašnjim carstvima. Upravo tu činjenicu Ivo Andrić koristi da napravi fantastičan pripovijedački luk dug četiri stotine godina od gotovo kristalno čistog literarnog stila, čineći da most postane deo naših sopstvenih života.",
 				"https://www.knjizarakultura.com/proizvod/na-drini-aeuprija-tp-sezam-andriae-ivosezam-book/"));
 
-		allBooks.add(new Book(10,
+		books.add(new Book(10,
 				"Zločin i kazna",
 				"Fjodor Dosrojevski",
 				714,
@@ -184,7 +311,7 @@ public class Utils {
 				"Roman Zločin i kazna izgrađen je na fabuli koju poznajemo iz kriminalističkog štiva, s tom bitnom razlikom što ovdje već na početku djela saznajemo ko je ubojica, pa i šta ga je sve navelo na zločin. Zločin i kazna nije samo roman o pojedinačnom ljudskom karakteru ni samo psihološki roman ni roman o socijalno motiviranom karakteru već je sve to ali i mnogo više od toga. Djelo je u programu lektire za III razred gimnazije i sličnih srednjih škola.",
 				"https://www.delfi.rs/knjige/139253_zlocin_i_kazna_knjiga_delfi_knjizare.html"));
 
-		allBooks.add(new Book(11,
+		books.add(new Book(11,
 				"Na Drini ćuprija",
 				"Ivo Andrić",
 				333,
@@ -193,7 +320,7 @@ public class Utils {
 				"Kameni most iz XVI veka, zadužbina Mehmed paše Sokolovića, kao nemi svedok pamti prividno slaganje različitih kultura, vera i naroda dok među njima u stvari vlada antagonizam. Najvidljivija je razlika između dve civilizacije, istočne i zapadne. Most je, između građenja i delimičnog rušenja početkom XX veka, bio jedina postojana i nepromenljiva tačka o koju se odbijaju sve napetosti i komešanja koja rađaju sukobe među ljudima, kulturama, verama i tadašnjim carstvima. Upravo tu činjenicu Ivo Andrić koristi da napravi fantastičan pripovijedački luk dug četiri stotine godina od gotovo kristalno čistog literarnog stila, čineći da most postane deo naših sopstvenih života.",
 				"https://www.knjizarakultura.com/proizvod/na-drini-aeuprija-tp-sezam-andriae-ivosezam-book/"));
 
-		allBooks.add(new Book(12,
+		books.add(new Book(12,
 				"Zločin i kazna",
 				"Fjodor Dosrojevski",
 				714,
@@ -202,7 +329,7 @@ public class Utils {
 				"Roman Zločin i kazna izgrađen je na fabuli koju poznajemo iz kriminalističkog štiva, s tom bitnom razlikom što ovdje već na početku djela saznajemo ko je ubojica, pa i šta ga je sve navelo na zločin. Zločin i kazna nije samo roman o pojedinačnom ljudskom karakteru ni samo psihološki roman ni roman o socijalno motiviranom karakteru već je sve to ali i mnogo više od toga. Djelo je u programu lektire za III razred gimnazije i sličnih srednjih škola.",
 				"https://www.delfi.rs/knjige/139253_zlocin_i_kazna_knjiga_delfi_knjizare.html"));
 
-		allBooks.add(new Book(13,
+		books.add(new Book(13,
 				"Na Drini ćuprija",
 				"Ivo Andrić",
 				333,
@@ -211,7 +338,7 @@ public class Utils {
 				"Kameni most iz XVI veka, zadužbina Mehmed paše Sokolovića, kao nemi svedok pamti prividno slaganje različitih kultura, vera i naroda dok među njima u stvari vlada antagonizam. Najvidljivija je razlika između dve civilizacije, istočne i zapadne. Most je, između građenja i delimičnog rušenja početkom XX veka, bio jedina postojana i nepromenljiva tačka o koju se odbijaju sve napetosti i komešanja koja rađaju sukobe među ljudima, kulturama, verama i tadašnjim carstvima. Upravo tu činjenicu Ivo Andrić koristi da napravi fantastičan pripovijedački luk dug četiri stotine godina od gotovo kristalno čistog literarnog stila, čineći da most postane deo naših sopstvenih života.",
 				"https://www.knjizarakultura.com/proizvod/na-drini-aeuprija-tp-sezam-andriae-ivosezam-book/"));
 
-		allBooks.add(new Book(4,
+		books.add(new Book(4,
 				"Zločin i kazna",
 				"Fjodor Dosrojevski",
 				714,
@@ -220,7 +347,7 @@ public class Utils {
 				"Roman Zločin i kazna izgrađen je na fabuli koju poznajemo iz kriminalističkog štiva, s tom bitnom razlikom što ovdje već na početku djela saznajemo ko je ubojica, pa i šta ga je sve navelo na zločin. Zločin i kazna nije samo roman o pojedinačnom ljudskom karakteru ni samo psihološki roman ni roman o socijalno motiviranom karakteru već je sve to ali i mnogo više od toga. Djelo je u programu lektire za III razred gimnazije i sličnih srednjih škola.",
 				"https://www.delfi.rs/knjige/139253_zlocin_i_kazna_knjiga_delfi_knjizare.html"));
 
-		allBooks.add(new Book(15,
+		books.add(new Book(15,
 				"Na Drini ćuprija",
 				"Ivo Andrić",
 				333,
@@ -229,7 +356,7 @@ public class Utils {
 				"Kameni most iz XVI veka, zadužbina Mehmed paše Sokolovića, kao nemi svedok pamti prividno slaganje različitih kultura, vera i naroda dok među njima u stvari vlada antagonizam. Najvidljivija je razlika između dve civilizacije, istočne i zapadne. Most je, između građenja i delimičnog rušenja početkom XX veka, bio jedina postojana i nepromenljiva tačka o koju se odbijaju sve napetosti i komešanja koja rađaju sukobe među ljudima, kulturama, verama i tadašnjim carstvima. Upravo tu činjenicu Ivo Andrić koristi da napravi fantastičan pripovijedački luk dug četiri stotine godina od gotovo kristalno čistog literarnog stila, čineći da most postane deo naših sopstvenih života.",
 				"https://www.knjizarakultura.com/proizvod/na-drini-aeuprija-tp-sezam-andriae-ivosezam-book/"));
 
-		allBooks.add(new Book(16,
+		books.add(new Book(16,
 				"Zločin i kazna",
 				"Fjodor Dosrojevski",
 				714,
@@ -238,26 +365,44 @@ public class Utils {
 				"Roman Zločin i kazna izgrađen je na fabuli koju poznajemo iz kriminalističkog štiva, s tom bitnom razlikom što ovdje već na početku djela saznajemo ko je ubojica, pa i šta ga je sve navelo na zločin. Zločin i kazna nije samo roman o pojedinačnom ljudskom karakteru ni samo psihološki roman ni roman o socijalno motiviranom karakteru već je sve to ali i mnogo više od toga. Djelo je u programu lektire za III razred gimnazije i sličnih srednjih škola.",
 				"https://www.delfi.rs/knjige/139253_zlocin_i_kazna_knjiga_delfi_knjizare.html"));
 
-
+		SharedPreferences.Editor editor = sharedPreferences.edit();
+		Gson gson = new Gson();
+		editor.putString(ALL_BOOKS_KEY, gson.toJson(books));
+		editor.commit();
 	}
 
-	public static ArrayList<Book> getAllBooks() {
-		return allBooks;
+	public ArrayList<Book> getAllBooks() {
+		Gson gson = new Gson();
+		Type type = new TypeToken<ArrayList<Book>>(){}.getType();
+		ArrayList<Book> books = gson.fromJson(sharedPreferences.getString(ALL_BOOKS_KEY, null), type);
+		return books;
 	}
 
-	public static ArrayList<Book> getFavouriteBooks() {
-		return favouriteBooks;
+	public ArrayList<Book> getFavouriteBooks() {
+		Gson gson = new Gson();
+		Type type = new TypeToken<ArrayList<Book>>(){}.getType();
+		ArrayList<Book> books = gson.fromJson(sharedPreferences.getString(FAVOURITE_BOOKS_KEY, null), type);
+		return books;
 	}
 
-	public static ArrayList<Book> getAlreadyReadBooks() {
-		return alreadyReadBooks;
+	public ArrayList<Book> getAlreadyReadBooks() {
+		Gson gson = new Gson();
+		Type type = new TypeToken<ArrayList<Book>>(){}.getType();
+		ArrayList<Book> books = gson.fromJson(sharedPreferences.getString(ALREADY_READ_BOOKS_KEY, null), type);
+		return books;
 	}
 
-	public static ArrayList<Book> getWishListBooks() {
-		return wishListBooks;
+	public ArrayList<Book> getWishListBooks() {
+		Gson gson = new Gson();
+		Type type = new TypeToken<ArrayList<Book>>(){}.getType();
+		ArrayList<Book> books = gson.fromJson(sharedPreferences.getString(WISHLIST_BOOKS_KEY, null), type);
+		return books;
 	}
 
-	public static ArrayList<Book> getCurrentlyReadingBooks() {
-		return currentlyReadingBooks;
+	public ArrayList<Book> getCurrentlyReadingBooks() {
+		Gson gson = new Gson();
+		Type type = new TypeToken<ArrayList<Book>>(){}.getType();
+		ArrayList<Book> books = gson.fromJson(sharedPreferences.getString(CURRENTLY_READING_BOOKS_KEY, null), type);
+		return books;
 	}
 }

@@ -28,7 +28,7 @@ public class AlreadyReadBooksActivity extends AppCompatActivity {
 		initViews();
 
 		adapter = new BooksRecyclerViewAdapter(AlreadyReadBooksActivity.this, ALREADY_READ_BOOKS_ACTIVITY_NAME);
-		adapter.setBooks(Utils.minimize(Utils.getAlreadyReadBooks()));
+		adapter.setBooks(Utils.minimize(Utils.getInstance(this).getAlreadyReadBooks()));
 
 		checkAlreadyBooksStatus();
 
@@ -37,7 +37,7 @@ public class AlreadyReadBooksActivity extends AppCompatActivity {
 	}
 
 	public void checkAlreadyBooksStatus() {
-		if (Utils.getAlreadyReadBooks().isEmpty()) {
+		if (Utils.getInstance(this).getAlreadyReadBooks().isEmpty()) {
 			noBooksLayout.setVisibility(View.VISIBLE);
 			noBooksButton.setOnClickListener(new View.OnClickListener() {
 				@Override

@@ -41,7 +41,7 @@ public class BookActivity extends AppCompatActivity {
 		if (null != intent) {
 			int bookId = intent.getIntExtra(BOOK_ID_KEY, -1);
 			if (bookId != -1) {
-				final Book selectedBook = Utils.getInstance().getBookById(bookId);
+				final Book selectedBook = Utils.getInstance(this).getBookById(bookId);
 				if (null != selectedBook) {
 					setBookViewData(selectedBook);
 
@@ -67,9 +67,9 @@ public class BookActivity extends AppCompatActivity {
 	}
 
 	private void handleAddToWishListBooksButton(final Book currentBook) {
-		ArrayList<Book> wishListBooks = Utils.getInstance().getWishListBooks();
-		ArrayList<Book> alreadyReadBooks = Utils.getInstance().getAlreadyReadBooks();
-		ArrayList<Book> currentlyReadingBooks = Utils.getInstance().getCurrentlyReadingBooks();
+		ArrayList<Book> wishListBooks = Utils.getInstance(this).getWishListBooks();
+		ArrayList<Book> alreadyReadBooks = Utils.getInstance(this).getAlreadyReadBooks();
+		ArrayList<Book> currentlyReadingBooks = Utils.getInstance(this).getCurrentlyReadingBooks();
 
 		boolean existsInWishListBooks = false;
 		boolean existsInAlreadyReadBooks = false;
@@ -108,11 +108,11 @@ public class BookActivity extends AppCompatActivity {
 			addToWishListBooksButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					if (Utils.addWishListBook(currentBook)) {
+					if (Utils.getInstance(BookActivity.this).addWishListBook(currentBook)) {
 						if (finalExistsInAlreadyReadBooks) {
 							alreadyReadBooksButton.setIcon(null);
 							alreadyReadBooksButton.setClickable(true);
-							if (Utils.removeFromAlreadyReadBooks(currentBook)) {
+							if (Utils.getInstance(BookActivity.this).removeFromAlreadyReadBooks(currentBook)) {
 								Log.d(TAG, "onClick: removeFromAlreadyReadBooks successful");
 							} else {
 								Log.d(TAG, "onClick: removeFromAlreadyReadBooks failed");
@@ -121,7 +121,7 @@ public class BookActivity extends AppCompatActivity {
 						if (finalExistsInCurrentlyReadingBooks) {
 							currentlyReadingBooksButton.setIcon(null);
 							currentlyReadingBooksButton.setClickable(true);
-							if (Utils.removeFromCurrentlyReadingBooks(currentBook)) {
+							if (Utils.getInstance(BookActivity.this).removeFromCurrentlyReadingBooks(currentBook)) {
 								Log.d(TAG, "onClick: removeFromCurrentlyReadingBooks successful");
 							} else {
 								Log.d(TAG, "onClick: removeFromCurrentlyReadingBooks failed");
@@ -140,9 +140,9 @@ public class BookActivity extends AppCompatActivity {
 	}
 
 	private void handleAlreadyReadBooksButton(final Book currentBook) {
-		ArrayList<Book> alreadyReadBooks = Utils.getInstance().getAlreadyReadBooks();
-		ArrayList<Book> currentlyReadingBooks = Utils.getInstance().getCurrentlyReadingBooks();
-		ArrayList<Book> wishListBooks = Utils.getInstance().getWishListBooks();
+		ArrayList<Book> alreadyReadBooks = Utils.getInstance(this).getAlreadyReadBooks();
+		ArrayList<Book> currentlyReadingBooks = Utils.getInstance(this).getCurrentlyReadingBooks();
+		ArrayList<Book> wishListBooks = Utils.getInstance(this).getWishListBooks();
 
 		boolean existsInAlreadyReadBooks = false;
 		boolean existsInCurrentlyReadingBooks = false;
@@ -181,11 +181,11 @@ public class BookActivity extends AppCompatActivity {
 			alreadyReadBooksButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					if (Utils.addAlreadyReadBook(currentBook)) {
+					if (Utils.getInstance(BookActivity.this).addAlreadyReadBook(currentBook)) {
 						if (finalExistsInCurrentlyReadingBooks) {
 							currentlyReadingBooksButton.setIcon(null);
 							currentlyReadingBooksButton.setCheckable(true);
-							if (Utils.removeFromCurrentlyReadingBooks(currentBook)) {
+							if (Utils.getInstance(BookActivity.this).removeFromCurrentlyReadingBooks(currentBook)) {
 								Log.d(TAG, "onClick: removeFromCurrentlyReadingBooks successful");
 							} else {
 								Log.d(TAG, "onClick: removeFromCurrentlyReadingBooks failed");
@@ -194,7 +194,7 @@ public class BookActivity extends AppCompatActivity {
 						if (finalExistsInWishListBooks) {
 							addToWishListBooksButton.setIcon(null);
 							addToWishListBooksButton.setClickable(true);
-							if (Utils.removeFromWishListBooks(currentBook)) {
+							if (Utils.getInstance(BookActivity.this).removeFromWishListBooks(currentBook)) {
 								Log.d(TAG, "onClick: removeFromWishListBooks successful");
 							} else {
 								Log.d(TAG, "onClick: removeFromWishListBooks failed");
@@ -213,7 +213,7 @@ public class BookActivity extends AppCompatActivity {
 	}
 
 	private void handleAddToFavouritesButton(final Book currentBook) {
-		ArrayList<Book> favouriteBooks = Utils.getInstance().getFavouriteBooks();
+		ArrayList<Book> favouriteBooks = Utils.getInstance(this).getFavouriteBooks();
 
 		boolean existsInFavouriteBooks = false;
 
@@ -232,7 +232,7 @@ public class BookActivity extends AppCompatActivity {
 			addToFavouritesBooksButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					if (Utils.addFavouriteBook(currentBook)) {
+					if (Utils.getInstance(BookActivity.this).addFavouriteBook(currentBook)) {
 						Toast.makeText(BookActivity.this, "Added to favourite books.", Toast.LENGTH_SHORT).show();
 						Intent intent = new Intent(BookActivity.this, MainActivity.class);
 						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -246,9 +246,9 @@ public class BookActivity extends AppCompatActivity {
 	}
 
 	private void handleCurrentlyReadingBooksButton(final Book currentBook) {
-		ArrayList<Book> currentlyReadingBooks = Utils.getInstance().getCurrentlyReadingBooks();
-		ArrayList<Book> alreadyReadBooks = Utils.getInstance().getAlreadyReadBooks();
-		ArrayList<Book> wishListBooks = Utils.getInstance().getWishListBooks();
+		ArrayList<Book> currentlyReadingBooks = Utils.getInstance(this).getCurrentlyReadingBooks();
+		ArrayList<Book> alreadyReadBooks = Utils.getInstance(this).getAlreadyReadBooks();
+		ArrayList<Book> wishListBooks = Utils.getInstance(this).getWishListBooks();
 
 		boolean existsInCurrentlyReadingBooks = false;
 		boolean existsInAlreadyReadBooks = false;
@@ -287,11 +287,11 @@ public class BookActivity extends AppCompatActivity {
 			currentlyReadingBooksButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					if (Utils.addCurrentlyReadingBook(currentBook)) {
+					if (Utils.getInstance(BookActivity.this).addCurrentlyReadingBook(currentBook)) {
 						if (finalExistsInAlreadyReadBooks) {
 							alreadyReadBooksButton.setIcon(null);
 							alreadyReadBooksButton.setCheckable(true);
-							if (Utils.removeFromAlreadyReadBooks(currentBook)) {
+							if (Utils.getInstance(BookActivity.this).removeFromAlreadyReadBooks(currentBook)) {
 								Log.d(TAG, "onClick: removeFromAlreadyReadBooks successful");
 							} else {
 								Log.d(TAG, "onClick: removeFromAlreadyReadBooks failed");
@@ -301,7 +301,7 @@ public class BookActivity extends AppCompatActivity {
 						if (finalExistsInWishListBooks) {
 							addToWishListBooksButton.setIcon(null);
 							addToWishListBooksButton.setClickable(true);
-							if (Utils.removeFromWishListBooks(currentBook)) {
+							if (Utils.getInstance(BookActivity.this).removeFromWishListBooks(currentBook)) {
 								Log.d(TAG, "onClick: removeFromWishListBooks successful");
 							} else {
 								Log.d(TAG, "onClick: removeFromWishListBooks failed");

@@ -28,7 +28,7 @@ public class FavouriteBooksActivity extends AppCompatActivity {
 		initViews();
 
 		adapter = new BooksRecyclerViewAdapter(this, FAVOURITE_BOOKS_ACTIVITY_NAME);
-		adapter.setBooks(Utils.minimize(Utils.getFavouriteBooks()));
+		adapter.setBooks(Utils.minimize(Utils.getInstance(this).getFavouriteBooks()));
 
 		checkFavouriteBooksStatus();
 
@@ -37,7 +37,7 @@ public class FavouriteBooksActivity extends AppCompatActivity {
 	}
 
 	public void checkFavouriteBooksStatus() {
-		if (Utils.getFavouriteBooks().isEmpty()) {
+		if (Utils.getInstance(this).getFavouriteBooks().isEmpty()) {
 			noBooksLayout.setVisibility(View.VISIBLE);
 			noBooksButton.setOnClickListener(new View.OnClickListener() {
 				@Override

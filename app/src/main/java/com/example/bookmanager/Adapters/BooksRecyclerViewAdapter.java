@@ -102,7 +102,7 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecycler
 						alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
-								if (Utils.removeFromAlreadyReadBooks(bookItem)) {
+								if (Utils.getInstance(mContext).removeFromAlreadyReadBooks(bookItem)) {
 									Toast.makeText(mContext, "Removed from already read books.", Toast.LENGTH_SHORT).show();
 									//notifyDataSetChanged();
 									Intent intent = new Intent(mContext, AlreadyReadBooksActivity.class);
@@ -134,7 +134,7 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecycler
 						alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
-								if (Utils.removeFromCurrentlyReadingBooks(bookItem)) {
+								if (Utils.getInstance(mContext).removeFromCurrentlyReadingBooks(bookItem)) {
 									Toast.makeText(mContext, "Removed from currently reading books.", Toast.LENGTH_SHORT).show();
 									//notifyDataSetChanged();
 									Intent intent = new Intent(mContext, CurrentlyReadingBooksActivity.class);
@@ -166,7 +166,7 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecycler
 						alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
-								if (Utils.removeFromFavouriteBooks(bookItem)) {
+								if (Utils.getInstance(mContext).removeFromFavouriteBooks(bookItem)) {
 									Toast.makeText(mContext, "Removed from favourite books.", Toast.LENGTH_SHORT).show();
 									//notifyDataSetChanged();
 									Intent intent = new Intent(mContext, FavouriteBooksActivity.class);
@@ -198,7 +198,7 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecycler
 						alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
-								if (Utils.removeFromWishListBooks(bookItem)) {
+								if (Utils.getInstance(mContext).removeFromWishListBooks(bookItem)) {
 									Toast.makeText(mContext, "Removed from wishlist.", Toast.LENGTH_SHORT).show();
 									//notifyDataSetChanged();
 									Intent intent = new Intent(mContext, WishlistBooksActivity.class);
