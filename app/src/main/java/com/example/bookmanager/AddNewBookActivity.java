@@ -1,28 +1,50 @@
 package com.example.bookmanager;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.bookmanager.Models.Book;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Objects;
+
 public class AddNewBookActivity extends AppCompatActivity {
 
+	private static final int PICK_PHOTO_FROM_GALLERY = 1;
 	private TextInputEditText bookName, authorName, numberOfPages, bookImageUrl, bookUrl, shortDesc, longDesc;
 	private MaterialButton addNewBookButton, cancelAddButton;
 	private RelativeLayout parentLayout;
+	private ImageView pickImageFromGallery;
 	private boolean areEntriesCorrect;
+	private Bitmap bitmap;
+	private Uri profileImageUri = Uri.EMPTY;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +57,13 @@ public class AddNewBookActivity extends AppCompatActivity {
 			@Override
 			public void onClick(View v) {
 				showCancelAlertDialog();
+			}
+		});
+
+		pickImageFromGallery.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				pickImage();
 			}
 		});
 
@@ -55,7 +84,7 @@ public class AddNewBookActivity extends AppCompatActivity {
 					areEntriesCorrect = false;
 				}
 				if (bookImageUrl.getText().toString().isEmpty()) {
-					bookImageUrl.setError("Enter book URL");
+					bookImageUrl.setError("Enter image URL");
 					areEntriesCorrect = false;
 				}
 				if (bookUrl.getText().toString().isEmpty()) {
@@ -68,6 +97,7 @@ public class AddNewBookActivity extends AppCompatActivity {
 					String authorNameInput = authorName.getText().toString();
 					int numberOfPagesInput = Integer.parseInt(numberOfPages.getText().toString());
 					String bookImageUrlInput = bookImageUrl.getText().toString();
+					Log.d("TEST", "onClick: image-url: " + bookImageUrlInput);
 					String bookUrlInput = bookUrl.getText().toString();
 					String shortDescInput = shortDesc.getText().toString();
 					String longDescInput = longDesc.getText().toString();
@@ -107,6 +137,8 @@ public class AddNewBookActivity extends AppCompatActivity {
 		cancelAddButton = findViewById(R.id.button_cancel_add_new_book);
 
 		parentLayout = findViewById(R.id.add_new_book_parent_relative_layout);
+
+		pickImageFromGallery = findViewById(R.id.pick_image_from_gallery_button);
 	}
 
 	private void showCancelAlertDialog() {
@@ -234,5 +266,38 @@ public class AddNewBookActivity extends AppCompatActivity {
 	@Override
 	public void onBackPressed() {
 		showCancelAlertDialog();
+	}
+
+	public void pickImage() {
+		Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+		intent.setType("image/*");
+		startActivityForResult(intent, PICK_PHOTO_FROM_GALLERY);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == PICK_PHOTO_FROM_GALLERY && resultCode == AddNewBookActivity.RESULT_OK) {
+			if (data == null) {
+				Toast.makeText(AddNewBookActivity.this, "Image not selected", Toast.LENGTH_SHORT).show();
+				return;
+			}
+			try {
+				InputStream inputStream = AddNewBookActivity.this.getContentResolver().openInputStream(Objects.requireNonNull(data.getData()));
+				if (inputStream == null) {
+					Toast.makeText(AddNewBookActivity.this, "Error selecting image", Toast.LENGTH_SHORT).show();
+					return;
+				}
+				bitmap = BitmapFactory.decodeStream(inputStream);
+
+				profileImageUri = data.getData();
+
+				bookImageUrl.setText(profileImageUri.toString());
+
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

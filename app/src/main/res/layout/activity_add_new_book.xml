@@ -2,11 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/add_new_book_parent_relative_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:fitsSystemWindows="true"
-    android:id="@+id/add_new_book_parent_relative_layout"
+    android:orientation="vertical"
     tools:context=".AddNewBookActivity">
 
     <ScrollView
@@ -37,7 +37,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:imeOptions="actionNext"
-                        android:inputType="textPersonName|textCapWords"
+                        android:inputType="textPersonName|textCapSentences"
                         android:singleLine="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -79,38 +79,57 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:imeOptions="actionNext"
-                        android:inputType="number|textCapWords"
+                        android:inputType="number"
                         android:singleLine="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/add_new_book_image_url_container"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <LinearLayout
+                    android:id="@+id/book_image_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/add_new_book_pages_container"
+                    android:layout_below="@+id/add_new_book_pages_container"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
-                    android:hint="Book image URL link">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/add_new_book_image_url"
-                        android:layout_width="match_parent"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/add_new_book_image_url_container"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:imeOptions="actionNext"
-                        android:inputType="text|textCapWords"
-                        android:singleLine="true" />
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="90"
+                        android:hint="Book image URL link">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/add_new_book_image_url"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:imeOptions="actionNext"
+                            android:inputType="textWebEditText"
+                            android:singleLine="true" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <ImageView
+                        android:id="@+id/pick_image_from_gallery_button"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="-5dp"
+                        android:layout_weight="10"
+                        android:src="@drawable/ic_camera" />
+
+                </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/add_new_book_url_container"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/add_new_book_image_url_container"
+                    android:layout_below="@id/book_image_container"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
@@ -121,7 +140,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:imeOptions="actionNext"
-                        android:inputType="text|textCapWords"
+                        android:inputType="textWebEditText"
                         android:singleLine="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -143,7 +162,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="top|start"
                         android:imeOptions="actionNext"
-                        android:inputType="textMultiLine|textCapWords"
+                        android:inputType="textMultiLine|textCapSentences"
                         android:maxLines="3"
                         android:minLines="3" />
 
@@ -166,7 +185,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="top|start"
                         android:imeOptions="actionDone"
-                        android:inputType="textMultiLine|textCapWords"
+                        android:inputType="textMultiLine|textCapSentences"
                         android:maxLines="5"
                         android:minLines="5" />
 
@@ -176,15 +195,15 @@
     </ScrollView>
 
     <LinearLayout
-        android:layout_below="@id/scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/scroll"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
         android:layout_marginTop="20dp"
-        android:gravity="bottom"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
+        android:gravity="bottom"
         android:orientation="horizontal">
 
         <com.google.android.material.button.MaterialButton

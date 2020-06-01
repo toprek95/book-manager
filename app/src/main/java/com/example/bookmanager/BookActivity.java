@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -22,6 +23,7 @@ import com.google.android.material.button.MaterialButton;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import static com.example.bookmanager.WebsiteActivity.URL_NAME_TAG;
@@ -344,7 +346,7 @@ public class BookActivity extends AppCompatActivity {
 		learnMore = findViewById(R.id.learn_more_book_layout);
 	}
 
-	private void setBookViewData(@NotNull Book book) {
+	private void setBookViewData(Book book) {
 		bookName.setText(book.getName());
 		authorName.setText(book.getAuthor());
 		numberOfPages.setText(String.valueOf(book.getNumberOdPages()));
@@ -352,7 +354,7 @@ public class BookActivity extends AppCompatActivity {
 
 		Glide.with(this)
 				.asBitmap()
-				.load(book.getImageUrl())
+				.load(Uri.parse(book.getImageUrl()))
 				.into(bookImage);
 	}
 
@@ -369,7 +371,7 @@ public class BookActivity extends AppCompatActivity {
 					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 					startActivity(intent);
 				} else {
-					Toast.makeText(BookActivity.this, "Something went wrong. Plese try again.", Toast.LENGTH_SHORT).show();
+					Toast.makeText(BookActivity.this, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
 				}
 
 			}

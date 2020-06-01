@@ -56,27 +56,6 @@ public class AllBooksActivity extends AppCompatActivity {
 		allBooksRecyclerView = this.findViewById(R.id.all_books_recycler_view);
 	}
 
-	private void showAlertDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(AllBooksActivity.this);
-		builder.setTitle("Add new book");
-		builder.setMessage("Do you want to add new book?");
-		builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				Intent intent = new Intent(AllBooksActivity.this, AddNewBookActivity.class);
-				startActivity(intent);
-			}
-		});
-		builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-
-			}
-		});
-		builder.setCancelable(false);
-		builder.create().show();
-	}
-
 	@Override
 	public void onBackPressed() {
 		Intent intent = new Intent(this, MainActivity.class);
@@ -93,7 +72,8 @@ public class AllBooksActivity extends AppCompatActivity {
 	@Override
 	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		if (item.getItemId() == R.id.action_add_new_book) {
-			showAlertDialog();
+			Intent intent = new Intent(AllBooksActivity.this, AddNewBookActivity.class);
+			startActivity(intent);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

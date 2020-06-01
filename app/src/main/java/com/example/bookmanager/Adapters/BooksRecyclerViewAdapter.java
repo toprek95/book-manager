@@ -3,6 +3,7 @@ package com.example.bookmanager.Adapters;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,10 +69,9 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecycler
 		String pages = "Pages: " + bookItem.getNumberOdPages();
 		holder.bookPagesList.setText(pages);
 
-		Log.i(TAG, "onBindViewHolder: imageUrl before Glide: " + bookItem.getImageUrl());
 		Glide.with(mContext)
 				.asBitmap()
-				.load(bookItem.getImageUrl())
+				.load(Uri.parse(bookItem.getImageUrl()))
 				.into(holder.bookImageList);
 
 		holder.parentCardViewList.setOnClickListener(new View.OnClickListener() {
