@@ -19,7 +19,7 @@
     <string name="short_book_description_label">Short description:</string>
     <string name="book_cover_image_description">Book cover image</string>
     <string name="author">Author:</string>
-    <string name="number_of_pages_label">Number of pages:</string>
+    <string name="number_of_pages_label">Pages:</string>
     <string name="no_pages_placeholder">123</string>
     <string name="currently_reading_button_label">Currently Reading</string>
     <string name="add_to_wishlist_button_label">Add to Wishlist</string>
