@@ -30,7 +30,8 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
-                    android:hint="Book name">
+                    android:hint="Book name"
+                    app:endIconMode="clear_text">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/add_new_book_name"
@@ -51,7 +52,8 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
-                    android:hint="Author name">
+                    android:hint="Author name"
+                    app:endIconMode="clear_text">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/add_new_book_author_name"
@@ -72,7 +74,8 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
-                    android:hint="Number of pages">
+                    android:hint="Number of pages"
+                    app:endIconMode="clear_text">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/add_new_book_pages"
@@ -102,7 +105,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
                         android:layout_weight="90"
-                        android:hint="Book image URL link">
+                        android:hint="Book image URL link"
+                        app:endIconMode="clear_text">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/add_new_book_image_url"
@@ -133,7 +137,8 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
-                    android:hint="Book URL link">
+                    android:hint="Book URL link"
+                    app:endIconMode="clear_text">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/add_new_book_url"
@@ -154,7 +159,8 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
-                    android:hint="Short description">
+                    android:hint="Short description"
+                    app:endIconMode="clear_text">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/add_new_book_short_desc"
@@ -177,7 +183,8 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
-                    android:hint="Long description">
+                    android:hint="Long description"
+                    app:endIconMode="clear_text">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/add_new_book_long_desc"
@@ -210,7 +217,7 @@
             android:id="@+id/button_cancel_add_new_book"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_marginEnd="10dp"
             android:layout_weight="1"
             android:text="Cancel"
@@ -219,7 +226,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_add_new_book"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
             android:text="Add" />

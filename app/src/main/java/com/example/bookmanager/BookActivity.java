@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,9 +20,6 @@ import com.bumptech.glide.Glide;
 import com.example.bookmanager.Models.Book;
 import com.google.android.material.button.MaterialButton;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
 import java.util.ArrayList;
 
 import static com.example.bookmanager.WebsiteActivity.URL_NAME_TAG;
@@ -32,6 +28,7 @@ public class BookActivity extends AppCompatActivity {
 
 	private static final String TAG = "BookActivity";
 	public static final String BOOK_ID_KEY = "bookId";
+	public static final String BOOK_ID_NUMBER_KEY = "bookIdNumber";
 	private ImageView bookImage;
 	private TextView bookName, authorName, numberOfPages, longDescription, learnMore;
 	private MaterialButton currentlyReadingBooksButton, addToFavouritesBooksButton, alreadyReadBooksButton, addToWishListBooksButton;
@@ -373,7 +370,6 @@ public class BookActivity extends AppCompatActivity {
 				} else {
 					Toast.makeText(BookActivity.this, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
 				}
-
 			}
 		});
 		builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -387,9 +383,15 @@ public class BookActivity extends AppCompatActivity {
 		builder.create().show();
 	}
 
+	private void editBook() {
+		Intent intent = new Intent(this, EditBookActivity.class);
+		intent.putExtra(BOOK_ID_KEY, book.getId());
+		startActivity(intent);
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_remove, menu);
+		getMenuInflater().inflate(R.menu.menu_edit_remove, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -399,7 +401,16 @@ public class BookActivity extends AppCompatActivity {
 			showAlertDialog();
 			return true;
 		}
+		if (item.getItemId() == R.id.action_edit_book) {
+			editBook();
+		}
 		return super.onOptionsItemSelected(item);
+	}
 
+	@Override
+	public void onBackPressed() {
+		Intent backIntent = new Intent(this, AllBooksActivity.class);
+		backIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(backIntent);
 	}
 }

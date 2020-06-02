@@ -1,5 +1,7 @@
 package com.example.bookmanager.Models;
 
+import java.util.Comparator;
+
 public class Book {
 	private int id;
 	private String name;
@@ -94,6 +96,20 @@ public class Book {
 	public void setBookWebsiteUrl(String bookWebsiteUrl) {
 		this.bookWebsiteUrl = bookWebsiteUrl;
 	}
+
+	public static Comparator<Book> bookIdComparator = new Comparator<Book>() {
+
+		public int compare(Book b1, Book b2) {
+
+			int bookId1 = b1.getId();
+			int bookId2 = b2.getId();
+
+			/*For ascending order*/
+			return bookId1-bookId2;
+
+			/*For descending order*/
+			//rollno2-rollno1;
+		}};
 
 	@Override
 	public String toString() {

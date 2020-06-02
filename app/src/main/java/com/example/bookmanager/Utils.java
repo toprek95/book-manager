@@ -2,6 +2,7 @@ package com.example.bookmanager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 
 import com.example.bookmanager.Models.Book;
 import com.google.gson.Gson;
@@ -9,6 +10,8 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class Utils {
 
@@ -35,24 +38,62 @@ public class Utils {
 		Gson gson = new Gson();
 
 		if (null == getFavouriteBooks()) {
-			editor.putString(FAVOURITE_BOOKS_KEY,gson.toJson(new ArrayList<Book>()));
+			editor.putString(FAVOURITE_BOOKS_KEY, gson.toJson(new ArrayList<Book>()));
 			editor.commit();
 		}
 
 		if (null == getAlreadyReadBooks()) {
-			editor.putString(ALREADY_READ_BOOKS_KEY,gson.toJson(new ArrayList<Book>()));
+			editor.putString(ALREADY_READ_BOOKS_KEY, gson.toJson(new ArrayList<Book>()));
 			editor.commit();
 		}
 
 		if (null == getWishListBooks()) {
-			editor.putString(WISHLIST_BOOKS_KEY,gson.toJson(new ArrayList<Book>()));
+			editor.putString(WISHLIST_BOOKS_KEY, gson.toJson(new ArrayList<Book>()));
 			editor.commit();
 		}
 
 		if (null == getCurrentlyReadingBooks()) {
-			editor.putString(CURRENTLY_READING_BOOKS_KEY,gson.toJson(new ArrayList<Book>()));
+			editor.putString(CURRENTLY_READING_BOOKS_KEY, gson.toJson(new ArrayList<Book>()));
 			editor.commit();
 		}
+	}
+
+	public boolean editBook(Book editedBook) {
+		ArrayList<Book> allBooks = getAllBooks();
+		if (null != allBooks) {
+			for (Book b : allBooks) {
+				if (b.getId() == editedBook.getId()) {
+					if (allBooks.remove(b)) {
+						if (allBooks.add(editedBook)) {
+							Gson gson = new Gson();
+							SharedPreferences.Editor editor = sharedPreferences.edit();
+							editor.remove(ALL_BOOKS_KEY);
+							editor.putString(ALL_BOOKS_KEY, gson.toJson(allBooks));
+							editor.commit();
+
+							if (removeFromWishListBooks(b)) {
+								addWishListBook(editedBook);
+							}
+
+							if (removeFromFavouriteBooks(b)) {
+								addFavouriteBook(editedBook);
+							}
+
+							if (removeFromCurrentlyReadingBooks(b)) {
+								addCurrentlyReadingBook(editedBook);
+							}
+
+							if (removeFromAlreadyReadBooks(b)) {
+								addAlreadyReadBook(editedBook);
+							}
+
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	public boolean addNewBook(Book book) {
@@ -230,8 +271,8 @@ public class Utils {
 		return false;
 	}
 
-	public static ArrayList<Book> minimize (ArrayList<Book> books) {
-		for (Book book: books) {
+	public static ArrayList<Book> minimize(ArrayList<Book> books) {
+		for (Book book : books) {
 			book.setExpended(false);
 		}
 		return books;
@@ -250,11 +291,11 @@ public class Utils {
 		return null;
 	}
 
-	public int getNextId () {
+	public int getNextId() {
 		ArrayList<Book> books = getAllBooks();
 		ArrayList<Integer> ids = new ArrayList<>();
 		if (null != books) {
-			for (Book b: books) {
+			for (Book b : books) {
 				ids.add(b.getId());
 			}
 			if (!ids.isEmpty()) {
@@ -327,36 +368,61 @@ public class Utils {
 
 	public ArrayList<Book> getAllBooks() {
 		Gson gson = new Gson();
-		Type type = new TypeToken<ArrayList<Book>>(){}.getType();
+		Type type = new TypeToken<ArrayList<Book>>() {
+		}.getType();
 		ArrayList<Book> books = gson.fromJson(sharedPreferences.getString(ALL_BOOKS_KEY, null), type);
+		//Sort books before returning
+		if (books != null) {
+			Collections.sort(books, Book.bookIdComparator);
+		}
 		return books;
 	}
 
 	public ArrayList<Book> getFavouriteBooks() {
 		Gson gson = new Gson();
-		Type type = new TypeToken<ArrayList<Book>>(){}.getType();
+		Type type = new TypeToken<ArrayList<Book>>() {
+		}.getType();
 		ArrayList<Book> books = gson.fromJson(sharedPreferences.getString(FAVOURITE_BOOKS_KEY, null), type);
+		//Sort books before returning
+		if (books != null) {
+			Collections.sort(books, Book.bookIdComparator);
+		}
 		return books;
 	}
 
 	public ArrayList<Book> getAlreadyReadBooks() {
 		Gson gson = new Gson();
-		Type type = new TypeToken<ArrayList<Book>>(){}.getType();
+		Type type = new TypeToken<ArrayList<Book>>() {
+		}.getType();
 		ArrayList<Book> books = gson.fromJson(sharedPreferences.getString(ALREADY_READ_BOOKS_KEY, null), type);
+		//Sort books before returning
+		if (books != null) {
+			Collections.sort(books, Book.bookIdComparator);
+		}
 		return books;
 	}
 
 	public ArrayList<Book> getWishListBooks() {
 		Gson gson = new Gson();
-		Type type = new TypeToken<ArrayList<Book>>(){}.getType();
+		Type type = new TypeToken<ArrayList<Book>>() {
+		}.getType();
 		ArrayList<Book> books = gson.fromJson(sharedPreferences.getString(WISHLIST_BOOKS_KEY, null), type);
+		//Sort books before returning
+		if (books != null) {
+			Collections.sort(books, Book.bookIdComparator);
+		}
 		return books;
 	}
 
 	public ArrayList<Book> getCurrentlyReadingBooks() {
 		Gson gson = new Gson();
-		Type type = new TypeToken<ArrayList<Book>>(){}.getType();
+		Type type = new TypeToken<ArrayList<Book>>() {
+		}.getType();
 		ArrayList<Book> books = gson.fromJson(sharedPreferences.getString(CURRENTLY_READING_BOOKS_KEY, null), type);
+		//Sort books before returning
+		if (books != null) {
+			Collections.sort(books, Book.bookIdComparator);
+		}
 		return books;
 	}
 }
