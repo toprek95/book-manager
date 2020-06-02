@@ -1,36 +1,31 @@
 package com.example.bookmanager;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.example.bookmanager.Models.Book;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
@@ -38,12 +33,12 @@ import java.util.Objects;
 public class AddNewBookActivity extends AppCompatActivity {
 
 	private static final int PICK_PHOTO_FROM_GALLERY = 1;
+	private int STORAGE_PERMISSION_CODE = 2;
 	private TextInputEditText bookName, authorName, numberOfPages, bookImageUrl, bookUrl, shortDesc, longDesc;
 	private MaterialButton addNewBookButton, cancelAddButton;
 	private RelativeLayout parentLayout;
 	private ImageView pickImageFromGallery;
 	private boolean areEntriesCorrect;
-	private Bitmap bitmap;
 	private Uri profileImageUri = Uri.EMPTY;
 
 	@Override
@@ -63,7 +58,12 @@ public class AddNewBookActivity extends AppCompatActivity {
 		pickImageFromGallery.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				pickImage();
+				if (ContextCompat.checkSelfPermission(AddNewBookActivity.this,
+						Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+					pickImage();
+				} else {
+					requestStoragePermission();
+				}
 			}
 		});
 
@@ -263,15 +263,41 @@ public class AddNewBookActivity extends AppCompatActivity {
 		snackbar.show();
 	}
 
-	@Override
-	public void onBackPressed() {
-		showCancelAlertDialog();
-	}
-
 	public void pickImage() {
 		Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
 		intent.setType("image/*");
 		startActivityForResult(intent, PICK_PHOTO_FROM_GALLERY);
+	}
+
+	private void requestStoragePermission() {
+		if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+				Manifest.permission.READ_EXTERNAL_STORAGE)) {
+			new AlertDialog.Builder(this)
+					.setTitle("Permission needed")
+					.setMessage("This permission is needed to access images in phones gallery.")
+					.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							ActivityCompat.requestPermissions(AddNewBookActivity.this,
+									new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+						}
+					})
+					.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+						}
+					})
+					.create().show();
+		} else {
+			ActivityCompat.requestPermissions(this,
+					new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		showCancelAlertDialog();
 	}
 
 	@Override
@@ -288,7 +314,6 @@ public class AddNewBookActivity extends AppCompatActivity {
 					Toast.makeText(AddNewBookActivity.this, "Error selecting image", Toast.LENGTH_SHORT).show();
 					return;
 				}
-				bitmap = BitmapFactory.decodeStream(inputStream);
 
 				profileImageUri = data.getData();
 
@@ -297,6 +322,18 @@ public class AddNewBookActivity extends AppCompatActivity {
 
 			} catch (IOException e) {
 				e.printStackTrace();
+			}
+		}
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		if (requestCode == STORAGE_PERMISSION_CODE) {
+			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+				Toast.makeText(this, "Permission GRANTED", Toast.LENGTH_SHORT).show();
+				pickImage();
+			} else {
+				Toast.makeText(this, "Permission DENIED", Toast.LENGTH_SHORT).show();
 			}
 		}
 	}
