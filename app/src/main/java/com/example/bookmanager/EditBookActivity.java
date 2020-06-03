@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -33,8 +34,9 @@ import static com.example.bookmanager.BookActivity.BOOK_ID_KEY;
 
 public class EditBookActivity extends AppCompatActivity {
 
-	private static final int PICK_PHOTO_FROM_GALLERY = 1;
-	private static final int STORAGE_PERMISSION_CODE = 2;
+	private static final int PICK_PHOTO_FROM_GALLERY = 101;
+	private static final int REQUEST_STORAGE_PERMISSION_SETTINGS = 102;
+	private int STORAGE_PERMISSION_CODE = 103;
 	private TextInputEditText bookName, authorName, numberOfPages, bookImageUrl, bookUrl, shortDesc, longDesc;
 	private MaterialButton saveBookButton, cancelAddButton;
 	private RelativeLayout parentLayout;
@@ -73,12 +75,7 @@ public class EditBookActivity extends AppCompatActivity {
 		pickImageFromGallery.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (ContextCompat.checkSelfPermission(EditBookActivity.this,
-						Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-					pickImage();
-				} else {
-					requestStoragePermission();
-				}
+				handleStoragePermissionRequest();
 			}
 		});
 
@@ -126,6 +123,104 @@ public class EditBookActivity extends AppCompatActivity {
 		removeWarnings();
 	}
 
+	private void initViews() {
+		bookName = findViewById(R.id.edit_book_name);
+		authorName = findViewById(R.id.edit_book_author_name);
+		numberOfPages = findViewById(R.id.edit_book_pages);
+		bookImageUrl = findViewById(R.id.edit_book_image_url);
+		bookUrl = findViewById(R.id.edit_book_url);
+		shortDesc = findViewById(R.id.edit_book_short_desc);
+		longDesc = findViewById(R.id.edit_book_long_desc);
+
+		saveBookButton = findViewById(R.id.button_save_edit_book);
+		cancelAddButton = findViewById(R.id.button_cancel_edit_book);
+
+		parentLayout = findViewById(R.id.edit_book_parent_relative_layout);
+
+		pickImageFromGallery = findViewById(R.id.edit_book_pick_image_from_gallery_button);
+	}
+
+	// STORAGE PERMISSION AND OPEN GALLERY //
+
+	private void handleStoragePermissionRequest() {
+		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+			openGallery();
+		} else {
+			if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+				showStorageRationale();
+			} else {
+				askStoragePermission();
+			}
+		}
+	}
+
+	private void handleStoragePermissionRequestFromSettings() {
+		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+			Toast.makeText(this, "Permission Granted. You can pick book image now.", Toast.LENGTH_LONG).show();
+		} else {
+			Toast.makeText(this, "Permission not granted in settings", Toast.LENGTH_LONG).show();
+		}
+	}
+
+	private void showStorageRationale() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Storage permission needed");
+		builder.setMessage("Storage permission is needed to choose book cover image from phone gallery");
+		builder.setPositiveButton("Proceed", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				askStoragePermission();
+			}
+		});
+		builder.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		builder.setCancelable(false);
+		builder.create().show();
+	}
+
+	private void showStorageRationaleNeverAskAgain() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setIcon(R.drawable.ic_warning);
+		builder.setTitle("Permission denied");
+		builder.setMessage("You denied storage permission and checked option to never ask again. If you wan't to grant permission go to application settings and grant permission manually.");
+		builder.setPositiveButton("Go to settings", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Intent settingIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+				settingIntent.setData(Uri.fromParts("package", getPackageName(), null));
+				startActivityForResult(settingIntent, REQUEST_STORAGE_PERMISSION_SETTINGS);
+			}
+		});
+		builder.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		builder.setCancelable(false);
+		builder.create().show();
+	}
+
+	private void askStoragePermission() {
+		ActivityCompat.requestPermissions(
+				this,
+				new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+				STORAGE_PERMISSION_CODE
+		);
+	}
+
+	private void openGallery() {
+		Intent galleryIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+		galleryIntent.setType("image/*");
+		startActivityForResult(galleryIntent, PICK_PHOTO_FROM_GALLERY);
+	}
+
+	/////////////////////////////////
+
 	private void setViewsInitData() {
 		Book book = Utils.getInstance(this).getBookById(bookId);
 		bookName.setText(book.getName());
@@ -159,23 +254,6 @@ public class EditBookActivity extends AppCompatActivity {
 				})
 				.setAnchorView(R.id.button_add_new_book);
 		snackbar.show();
-	}
-
-	private void initViews() {
-		bookName = findViewById(R.id.edit_book_name);
-		authorName = findViewById(R.id.edit_book_author_name);
-		numberOfPages = findViewById(R.id.edit_book_pages);
-		bookImageUrl = findViewById(R.id.edit_book_image_url);
-		bookUrl = findViewById(R.id.edit_book_url);
-		shortDesc = findViewById(R.id.edit_book_short_desc);
-		longDesc = findViewById(R.id.edit_book_long_desc);
-
-		saveBookButton = findViewById(R.id.button_save_edit_book);
-		cancelAddButton = findViewById(R.id.button_cancel_edit_book);
-
-		parentLayout = findViewById(R.id.edit_book_parent_relative_layout);
-
-		pickImageFromGallery = findViewById(R.id.edit_book_pick_image_from_gallery_button);
 	}
 
 	private void removeWarnings() {
@@ -288,38 +366,6 @@ public class EditBookActivity extends AppCompatActivity {
 		builder.create().show();
 	}
 
-	private void pickImage() {
-		Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-		intent.setType("image/*");
-		startActivityForResult(intent, PICK_PHOTO_FROM_GALLERY);
-	}
-
-	private void requestStoragePermission() {
-		if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-				Manifest.permission.READ_EXTERNAL_STORAGE)) {
-			new AlertDialog.Builder(this)
-					.setTitle("Permission needed")
-					.setMessage("This permission is needed to access images in phones gallery.")
-					.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							ActivityCompat.requestPermissions(EditBookActivity.this,
-									new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
-						}
-					})
-					.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							dialog.dismiss();
-						}
-					})
-					.create().show();
-		} else {
-			ActivityCompat.requestPermissions(this,
-					new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
-		}
-	}
-
 	@Override
 	public void onBackPressed() {
 		showCancelAlertDialog();
@@ -349,16 +395,27 @@ public class EditBookActivity extends AppCompatActivity {
 				e.printStackTrace();
 			}
 		}
+
+		if (requestCode == REQUEST_STORAGE_PERMISSION_SETTINGS) {
+			handleStoragePermissionRequestFromSettings();
+		}
 	}
 
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-		if (requestCode == STORAGE_PERMISSION_CODE) {
-			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-				Toast.makeText(this, "Permission GRANTED", Toast.LENGTH_SHORT).show();
-				pickImage();
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		if (requestCode == STORAGE_PERMISSION_CODE && grantResults.length > 0) {
+			String permission = permissions[0];
+			if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+				boolean showRationale = ActivityCompat.shouldShowRequestPermissionRationale(this, permission);
+				if (!showRationale) {
+					showStorageRationaleNeverAskAgain();
+				} else if (Manifest.permission.READ_EXTERNAL_STORAGE.equals(permission)) {
+					Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+				}
 			} else {
-				Toast.makeText(this, "Permission DENIED", Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
+				openGallery();
 			}
 		}
 	}
